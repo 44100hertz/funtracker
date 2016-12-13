@@ -1,0 +1,31 @@
+* Format parsing
+** TODO Commands
+*** DONE design
+*** TODO tests
+*** TODO code
+** TODO Instruments
+*** DONE design
+*** TODO tests
+*** TODO code
+** TODO Macros
+*** TODO design
+*** TODO tests
+*** TODO code
+
+* Replayer basics
+** TODO Sound
+*** TODO play any sound at all
+*** TODO play pitched waves
+** TODO API for replayer / parser / editor
+*** TODO design
+*** TODO tests
+*** TODO code
+
+* Editor basics
+** TODO UI
+*** TODO get anything onscreen
+*** TODO draw scalable, colored, monospace plaintext
+** TODO Editing
+*** TODO design keybinds / workflow
+*** TODO basic input, menus
+*** TODO live command parsing/completion
