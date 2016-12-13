@@ -1,6 +1,6 @@
 * Architecture
 ** Samples
- - Headerless mono signed PCM
+Headerless mono signed PCM
 
 ** Instruments
 Command procedures that replace any part of the channel state
@@ -30,77 +30,88 @@ Inferred meaning
  - Up to 32^2 patterns of 999 length (base 32 names, 999 long jumps)
 
 ** Data
- - Numbers are all doubles
-   - decimal numbers, counting from 1
-   - ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
-   - .1m considered valid, etc.
-   - using only + or - will inc or dec the value
- - Boolean values
-   - ~y/t/1~ true
-   - ~n/f/0~ false
-   - will always normalize to 0/1 after entry
+| Numbers are all doubles
+  | decimal numbers, counting from 1
+  | ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
+  | ~.1m~ considered valid, etc.
+  | using only ~+~ or ~-~ will inc or dec the value
+| Boolean values
+  | ~y/t/1~ true
+  | ~n/f/0~ false
+  | will always normalize to ~0/1~ after entry
 
 ** Command format
 ~N-O / cXXXX~
  - ~N~ note letter
  - ~O~ octave
- - ~c~ the base 32 id; what to modify
+ - ~c~ param id (base32); what to modify
  - ~X~ params
-  - ~n~ number
-  - ~b~ bool
-  - ~i~ id (base32)
-  - ~[A-Z]~ special vaue
+   - ~n~ number
+   - ~b~ bool
+   - ~i~ id (base32)
+   - ~[A-Z]~ special vaue
 
 ** List of Commands/Params
 *** Internal
- - ~0n~ live output amplitude; set by song if {4} > 0 and {5} > 0
- - ~1i~ load instrument; set and initialize; default 0
- - ~2i~ set instrument; set w/o initialize; default 0
- - ~3n~ sample offset in points; default 0
- - ~4n~ sample length; default 0
- - ~5n~ sample rate; default 16000
- - ~6n~ loop start; default 0 = start of sample
- - ~7n~ loop length; default sample length
- - ~8L~ loop type; f=forward (default); p=pingpong; b=backward
- - ~9n~ volume base multiplier / 100; default 100 = 1x
+| syntax | desc                                        | default             |
+|--------+---------------------------------------------+---------------------|
+| ~0n~   | live output amplitude                       | set by song         |
+| ~1i~   | load instrument; set and initialize         | ~{2}~ instrument    |
+| ~2i~   | set instrument; set w/o initialize          | 0; nothing          |
+| ~3n~   | sample offset in points                     | 0                   |
+| ~4n~   | sample length                               | 0                   |
+| ~5n~   | sample rate                                 | 16000               |
+| ~6n~   | loop start                                  | 0; start of sample  |
+| ~7n~   | loop length                                 | ~{4}~ sample length |
+| ~8L~   | loop type; f=forward; p=pingpong; r=reverse | ~f~ = forward       |
+| ~9n~   | volume base multiplier / 100                | 100 = 1x            |
 note: ~3/4/5/6/7~ can be set to arbitrarily large/precise values in a macro.
 
 *** Playback
- - ~an~ mixer volume; ratio / 800; default 100=1/8
- - ~dn~ panning; 100=fully right; default 0
- - ~tn~ tuning adjustment; 100=full note, default 0
- - ~pn~ live phase in bytes; set if {4} > 0  and {5} > 0
- - ~nn~ whole note pitch; set by note column
+| syntax | desc                                             | default     |
+|--------+--------------------------------------------------+-------------|
+| ~an~   | mixer volume; ratio / 800                        | 100 = 1/8   |
+| ~dn~   | panning; 100=fully right                         | 0           |
+| ~tn~   | tuning adjustment; 100=full note                 | 0           |
+| ~pn~   | live phase in bytes; set if {4} > 0  and {5} > 0 | pitch-based |
+| ~nn~   | whole note pitch; set by note column             | note column |
 
 *** Patches
 input/output fixed pairs: ~gh / jk / lm~
- - ~[g/j/l]*~ input
-   - ~cn~ constant value n (default 1)
-   - ~[num]d~ channel num, delay d in ms
-   - ~ad~ the final mix, delay d in ms
-   - ~ln~ an LFO n ticks per sample
- - ~[h/k/m]O*~ output
-   - ~O~ output param to modify
-   - ~*~ modify method
-     - ~=n~ input * n/100; default 100=1.0
-     - ~wn~ wet/dry mix;  0=dry, 100=wet; default=50
-     - ~+n~ base + input * n/{5}, default 1 = +1/{5}
-     - ~-n~ base - input * n/{5}, default 1 = -1/{5}
- - examples
-   - ~g.... ha-..~ volume slide down 1/10000 per point
-   - ~g0... hp...~ total phase modulation from channel 0
-   - ~g0... htw20~ frequency modulation from channel 0
-   - ~g01k. h0w10~ mix 1000-sample delayed channel 0 into self
+| syntax      | desc                                    | default              |
+|-------------+-----------------------------------------+----------------------|
+| ~[g/j/l]*~  | input                                   |                      |
+|             | ~* = cn~ constant value n               | 1                    |
+|             | ~* = [num]d~ channel num, delay d in ms | channel=0, delay=0   |
+|             | ~* = ad~ the final mix, delay d in ms   | delay=0              |
+|             | ~* = ln~ an LFO n ticks per loop / 16   | 16 = 1 tick per loop |
+| ~[h/k/m]O*~ | output                                  |                      |
+|             | ~O~ output param to modify              |                      |
+|             | ~*~ modify method                       |                      |
+|             | ~* = =n~ input * n/100                  | 100 = x1             |
+|             | ~* = wn~ wet/dry mix;  0=dry, 100=wet   | 50, half and half    |
+|             | ~* = +n~ base + input * n/{5}           | 1 = +1/{5}           |
+|             | ~* = -n~ base + input * n/{5}           | 1 = -1/{5}           |
+
+examples
+| ~g.... ha-..~ | volume slide down 1/10000 per point         |                                   |   |
+| ~g0... hp...~ | total phase modulation from channel 0       |                                   |   |
+| ~g0... htw20~ | frequency modulation from channel 0         |                                   |   |
+| ~g01k. h0w10~ | mix 1000-sample delayed channel 0 into self |                                   |   |
 
 *** Channel Misc
- - ~cb~ clipping mode for mixer, 1=limit to [-1, 1]
- - ~wn~ sample rate at which to grab history, default 16000
+| syntax | desc                                        | default |
+|--------+---------------------------------------------+---------|
+| ~cb~   | clipping mode for mixer, 1=limit to [-1, 1] |       0 |
+| ~wn~   | sample rate at which to grab history        |   16000 |
 
 *** Playback Control
- - ~jjn~ next row
- - ~jpn~ next pattern
- - ~bn~ song BPM
- - ~vn~ global volume
+| syntax | desc                | default            |
+|--------+---------------------+--------------------|
+| ~jjn~  | next row            | natural song order |
+| ~jpn~  | next pattern        | natural song order |
+| ~bn~   | song BPM            | 120                |
+| ~vn~   | global volume / 100 | 100; 1x            |
 
 *** Unused
- - ~efruxy~ What could they be for?
+~efruxy~ What could they be for?
