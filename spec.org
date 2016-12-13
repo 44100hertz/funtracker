@@ -30,54 +30,42 @@ Inferred meaning: \\
 
 ** Songs
  - Songs are primarily plaintext, readable copies of what you see onscreen
- - Up to 32^2 patterns of 32^2 length (base 32 names)
+ - Up to 32^2 patterns of 999 length (base 32 names, 999 long jumps)
 
 ** Data
  - Numbers are all doubles
    - decimal numbers, counting from 1
-   - 8m, 8c, .8, 8, 80, 8h, 8k are all possible power levels, in order
+   - ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
    - .1m considered valid, etc.
    - using only + or - will inc or dec the value
- - Boolean values \\
-~y/t/1~ true \\
-~n/f/0~ false \\
-will always normalize to 0/1 after entry \\
+ - Boolean values
+   - ~y/t/1~ true
+   - ~n/f/0~ false
+   - will always normalize to 0/1 after entry
 
 ** Command format
 ~N-O / cXXXX~
  - ~N~ note letter
  - ~O~ octave
  - ~c~ the base 32 id; what to modify
- - ~X~ params \\
-~n~ number \\
-~b~ bool \\
-~i~ id (base32) \\
-~[A-Z]~ special vaue
+ - ~X~ params
+  - ~n~ number
+  - ~b~ bool
+  - ~i~ id (base32)
+  - ~[A-Z]~ special vaue
 
 ** List of Commands/Params
 *** Internal
- - ~0n~ live output amplitude \\
-set by song if {4} > 0 and {5} > 0
- - ~1i~ load instrument; set and initialize \\
-default 0
- - ~2i~ set instrument; set w/o initialize \\
-default 0
- - ~3n~ sample offset in points \\
-default 0
- - ~4n~ sample length \\
-default 0
- - ~5n~ sample rate \\
-default 16000
- - ~6n~ loop start \\
-default 0 = start of sample
- - ~7n~ loop length \\
-default sample length
- - ~8L~ loop type \\
-f=forward (default) \\
-p=pingpong \\
-b=backward \\
- - ~9n~ volume base multiplier / 100 \\
-default 100 = 1x
+ - ~0n~ live output amplitude; set by song if {4} > 0 and {5} > 0
+ - ~1i~ load instrument; set and initialize; default 0
+ - ~2i~ set instrument; set w/o initialize; default 0
+ - ~3n~ sample offset in points; default 0
+ - ~4n~ sample length; default 0
+ - ~5n~ sample rate; default 16000
+ - ~6n~ loop start; default 0 = start of sample
+ - ~7n~ loop length; default sample length
+ - ~8L~ loop type; f=forward (default); p=pingpong; b=backward
+ - ~9n~ volume base multiplier / 100; default 100 = 1x
 note: ~3/4/5/6/7~ can be set to arbitrarily large/precise values in a macro.
 
 *** Playback
@@ -89,23 +77,23 @@ note: ~3/4/5/6/7~ can be set to arbitrarily large/precise values in a macro.
 
 *** Patches
 input/output fixed pairs: ~gh / jk / lm~
- - ~[g/j/l]*~ input \\
-   ~cn~ constant value n (default 1) \\
-   ~[num]d~ channel num, delay d in ms \\
-   ~ad~ the final mix, delay d in ms \\
-   ~ln~ an LFO n ticks per sample
+ - ~[g/j/l]*~ input
+   - ~cn~ constant value n (default 1)
+   - ~[num]d~ channel num, delay d in ms
+   - ~ad~ the final mix, delay d in ms
+   - ~ln~ an LFO n ticks per sample
  - ~[h/k/m]O*~ output
    - ~O~ output param to modify
-   - ~*~ modify method \\
-     ~=n~ input * n/100; default 100=1.0 \\
-     ~wn~ wet/dry mix;  0=dry, 100=wet; default=50 \\
-     ~+n~ base + input * n/{5}, default 1 = +1/{5} \\
-     ~-n~ base - input * n/{5}, default 1 = -1/{5}
- - examples \\
-~g.... ha-..~ volume slide down 1/10000 per point \\
-~g0... hp...~ total phase modulation from channel 0 \\
-~g0... htw20~ frequency modulation from channel 0 \\
-~g01k. h0w10~ mix 1000-sample delayed channel 0 into self \\
+   - ~*~ modify method
+     - ~=n~ input * n/100; default 100=1.0
+     - ~wn~ wet/dry mix;  0=dry, 100=wet; default=50
+     - ~+n~ base + input * n/{5}, default 1 = +1/{5}
+     - ~-n~ base - input * n/{5}, default 1 = -1/{5}
+ - examples
+   - ~g.... ha-..~ volume slide down 1/10000 per point
+   - ~g0... hp...~ total phase modulation from channel 0
+   - ~g0... htw20~ frequency modulation from channel 0
+   - ~g01k. h0w10~ mix 1000-sample delayed channel 0 into self
 
 *** Channel Misc
  - ~cb~ clipping mode for mixer, 1=limit to [-1, 1]
