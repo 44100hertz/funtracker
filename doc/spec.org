@@ -55,7 +55,8 @@ k.        delayed note off by 1
 #+END_EXAMPLE
 
 ** Songs
-Songs are primarily plaintext, readable copies of what you see onscreen.
+Songs are stored in json, almost exactly like what you see in the tracker.
+See example-song.json for what they could look like.
 
 ** Data
 *** Numbers
