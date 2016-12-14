@@ -27,11 +27,6 @@ note          ; do the folowing on each note played
     a50       ; start at 50% mixer volume
 #+END_EXAMPLE
 
-** Channels
- - Channels have almost their entire state made of the params below
- - Channels store 1MB (262144) of their history in memory
- - The entire song stores that much as well
-
 ** Macros
 A list of note macros is defined for each song.
 Macros are executed at most one tick at a time.
