@@ -1,27 +1,30 @@
 * Architecture
 ** Samples
- - Headerless mono signed PCM
+Samples are headerless mono signed PCM
 
 ** Instruments
-Command procedures that replace any part of the channel state \\
-They can have arbitrary precision/size; 548000 is valid, only here.
+Instruments are commands that replace any part of the channel state.
+They can have arbitrary precision/size; for example 987654321.12345 is valid here.
 
 Example
- : [init] 3 41h 548k 6 7 8 9 g ha- [note] p a50
+#+BEGIN_SRC json
+"piano":{"init":"3 41h 548k 6 7 8 9 g ha-", "note":"p a50"}
+#+END_SRC
 
 Inferred meaning
 #+BEGIN_EXAMPLE
-[init]      do the following on instrument load
-30 4100     100 long sample at 0
-548000      sample rate 48khz
-60 7100     loop entire sample
-8f          loop forward
-8100        no volume adjustment
-gc001 ha-01 patch to ramp volume down over 1 second
+piano           ; start of piano instrument block
+  init          ; do the following on instrument load
+    30 4100     ; 100 long sample at 0
+    548000      ; sample rate 48khz
+    60 7100     ; loop entire sample
+    8f          ; loop forward
+    8100        ; no volume adjustment
+    gc001 ha-01 ; patch to ramp volume down over 1 second
 
-[note]      do the following on each note
-p0          play from start of sample
-a50         start at 50% mixer volume
+note            ; do the folowing on each note played
+    p0          ; play from start of sample
+    a50         ; start at 50% mixer volume
 #+END_EXAMPLE
 
 ** Channels
@@ -34,18 +37,22 @@ A list of note macros is defined for each song.
 Macros are executed at most one tick at a time.
 
 Syntax
- - ~.~ tick, do not set note
- - ~+n~ tick, set note to base note + n
- - ~-n~ tick, set note to base note - n
- - ~n~ start a new note on next tick
- - ~k~ end note after next tick
- - ~[~ repeat to here forever
- - ~]~ repeat from here forever (tick if no tick)
+#+BEGIN_EXAMPLE
+.   tick, do not set note
++n  tick, set note to base note + n
+-n  tick, set note to base note - n
+n   start a new note on next tick
+k   end note after next tick
+[   repeat to here forever
+]   repeat from here forever (tick if no tick)
+#+END_EXAMPLE
 
 Examples
- - ~[n+0+3+7]~ repeat an arpeggio triplet
- - ~[n]~ repeat note forever
- - ~k.~ delayed note off by 1
+#+BEGIN_EXAMPLE
+[n+0+3+7] repeat an arpeggio triplet
+[n]       repeat note forever
+k.        delayed note off by 1
+#+END_EXAMPLE
 
 ** Songs
 Songs are primarily plaintext, readable copies of what you see onscreen.
@@ -54,8 +61,8 @@ Songs are primarily plaintext, readable copies of what you see onscreen.
 *** Numbers
  - decimal floating-point numbers, counting from 1
  - ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
- - .1m considered valid, etc.
- - using only + or - will inc or dec the value
+ - stacking; ~.1m~ considered valid, etc.
+ - using only + or - will increment or decrement the value
 
 *** Boolean values
  - ~y/t/1~ true
