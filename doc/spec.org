@@ -23,8 +23,8 @@ init          ; do the following on instrument load
   gc001 ha-01 ; patch to ramp volume down over 1 second
 
 note          ; do the folowing on each note played
-    p0        ; play from start of sample
-    a50       ; start at 50% mixer volume
+  p0          ; play from start of sample
+  a50         ; start at 50% mixer volume
 #+END_EXAMPLE
 
 ** Macros
