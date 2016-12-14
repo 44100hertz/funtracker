@@ -1,0 +1,31 @@
+funtrack
+
+name 'example song
+channels 1
+bpm 120
+tickrate 6
+order 'intro [ a b ]
+
+instruments
+  piano
+    init '3 41h
+    note 'p
+  square
+    init '31h 4255
+
+macros
+  arpeg 'n+0+3+7
+
+patterns
+  intro
+    C-4 1pian
+    E-4 .....
+    G-4 .....
+  a
+    C-4 1squa
+    E-4 .....
+    G-4 .....
+  b
+    C-4 marp.
+    E-4 marp.
+    E-4 marp.
