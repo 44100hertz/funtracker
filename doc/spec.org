@@ -184,7 +184,7 @@ examples
 
 ~bn~ song BPM
 
-~rn~ set speed "rate" in rows per tick
+~rn~ set speed "rate" in ticks per row
 
 ~vn~ global volume
 
