@@ -8,7 +8,7 @@
 *** TODO tests
 *** TODO code
 ** TODO Macros
-*** TODO design
+*** DONE design
 *** TODO tests
 *** TODO code
 
