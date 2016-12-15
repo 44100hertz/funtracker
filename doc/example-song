@@ -14,7 +14,7 @@ instruments
     init '31h 4255
 
 macros
-  arpeg 'n+0+3+7
+  arpeg '037
 
 patterns
   intro

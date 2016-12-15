@@ -1,85 +1,5 @@
-* Architecture
-** Samples
-Samples are headerless mono signed PCM
-
-** Instruments
-Instruments are commands that replace any part of the channel state.
-They can have arbitrary precision/size; for example 48.3002 is valid here.
-
-Example
-#+BEGIN_EXAMPLE
-  init: 3 41h 548k 6 7 8 9 g ha-
-  note: p a50
-#+END_EXAMPLE
-
-Inferred meaning
-#+BEGIN_EXAMPLE
-init          ; do the following on instrument load
-  30 4100     ; 100 long sample at 0
-  548000      ; sample rate 48khz
-  60 7100     ; loop entire sample
-  8f          ; loop forward
-  8100        ; no volume adjustment
-  gc001 ha-01 ; patch to ramp volume down over 1 second
-
-note          ; do the folowing on each note played
-  p0          ; play from start of sample
-  a50         ; start at 50% mixer volume
-#+END_EXAMPLE
-
-** Macros
-A list of note macros is defined for each song.
-Macros are executed at most one tick at a time.
-
-Syntax
-#+BEGIN_EXAMPLE
-.   tick, do not set note
-+n  tick, set note to base note + n
--n  tick, set note to base note - n
-n   start a new note on next tick
-k   end note after next tick
-[   repeat to here forever
-]   repeat from here forever (tick if no tick)
-#+END_EXAMPLE
-
-Examples
-#+BEGIN_EXAMPLE
-[n+0+3+7] repeat an arpeggio triplet
-[n]       repeat note forever
-k.        delayed note off by 1
-#+END_EXAMPLE
-
-** Songs
-Songs are stored in a whitespace-aware plaintext.
-They're almost exactly what you see in the tracker.
-See example-song for what they could look like.
-
-*** Patterns
-Every pattern of a song has a name that's referencable as an id.
-
-Command format ~N-O / cXXXX~
-#+BEGIN_EXAMPLE
-N   note letter
-O   octave
-c   the base id; what to modify
-X   4 chars of params
-#+END_EXAMPLE
-
-*** Order
-Syntax
-#+BEGIN_EXAMPLE
-[id]    which order to play
-[       start of loop
-]       end of loop
-#+END_EXAMPLE
-
-Examples
-#+BEGIN_EXAMPLE
-[ a b a c ]    traditional song structure
-intro [body]   a song with an intro and body
-#+END_EXAMPLE
-
-** Data
+* Song Architecture
+** Data Types
 *** Numbers
  - decimal floating-point numbers, counting from 1
  - ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
@@ -109,7 +29,92 @@ examples
   0 = 0that
   1 = 1this
 #+END_EXAMPLE
+** Samples
+Samples are headerless mono signed PCM in a separate file.
 
+** Instruments
+Instruments are commands that replace any part of the channel state.
+They can have arbitrary precision/size; for example 48.3002 is valid here.
+
+Example
+#+BEGIN_EXAMPLE
+  init: 3 41h 548k 6 7 8 9 g ha-
+  note: p a50
+#+END_EXAMPLE
+
+Inferred meaning
+#+BEGIN_EXAMPLE
+init          ; do the following on instrument load
+  30 4100     ; 100 long sample at 0
+  548000      ; sample rate 48khz
+  60 7100     ; loop entire sample
+  8f          ; loop forward
+  8100        ; no volume adjustment
+  gc001 ha-01 ; patch to ramp volume down over 1 second
+
+note          ; do the folowing on each note played
+  p0          ; play from start of sample
+  a50         ; start at 50% mixer volume
+#+END_EXAMPLE
+
+** Macros
+A list of note macros is defined for each song.
+Macros are executed at one tick per command.
+
+Syntax
+#+BEGIN_EXAMPLE
+[num]  single-digit numbers play a note at base note + n, then tick
+.n     tick n times; default 1
++n     add n to the base note; default 1
+-n     subtract n from the base note; default 1
+>      add half an octave to the base note
+<      subtract half an octave from the base note
+n      new note before next tick
+o      note off after next tick
+k      note off after next tick, end macro here
+e      end macro (otherwise repeat)
+#+END_EXAMPLE
+
+Examples
+#+BEGIN_EXAMPLE
+037      arpeggio triplet
+<037     lower triplet
+n        repeat note forever
+k        delay note off by 1
+.k       delay note off by 2
++1       glissando up
+-1       glissando down
+#+END_EXAMPLE
+
+** Song data
+Songs are stored in a whitespace-aware plaintext.
+They're almost exactly what you see in the tracker.
+See example-song for what they could look like.
+
+*** Patterns
+Every pattern of a song has a name that's referencable as an id.
+
+Command format ~N-O / cXXXX~
+#+BEGIN_EXAMPLE
+N   note letter
+O   octave
+c   the base id; what to modify
+X   4 chars of params
+#+END_EXAMPLE
+
+*** Order
+Syntax
+#+BEGIN_EXAMPLE
+[id]    which order to play
+[       start of loop
+]       end of loop
+#+END_EXAMPLE
+
+Examples
+#+BEGIN_EXAMPLE
+[ a b a c ]    traditional song structure
+intro [body]   a song with an intro and body
+#+END_EXAMPLE
 ** List of Commands/Params
 *** Internal
 ~0n~ live channel output. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
@@ -144,6 +149,8 @@ Default 16000.
 ~pn~ live phase in points. Set if {4} > 0  and {5} > 0.
 
 ~nn~ whole note pitch, typically set by note column.
+
+~c*~ "create" macro * and run it here.
 
 ~mi~ Run macro i. Default 0.
 
@@ -189,4 +196,4 @@ examples
 ~vn~ global volume
 
 *** Unused
-~cuyl+-~ What could they be for?
+~uyl+-~ What could they be for?
