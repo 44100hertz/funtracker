@@ -52,8 +52,8 @@ init          ; do the following on instrument load
   548000      ; sample rate 48khz
   60 7100     ; loop entire sample
   8f          ; loop forward
-  8100        ; no volume adjustment
-  gc001 ha-01 ; patch to ramp volume down over 1 second
+  9100        ; no volume adjustment
+  gc1 ha-1    ; patch to ramp volume down over 1 second
 
 note          ; do the folowing on each note played
   p0          ; play from start of sample
@@ -122,7 +122,8 @@ intro [body]   a song with an intro and body
 *** Internal
 ~0n~ live channel *0utput*. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
 
-~1i~ load *1nstrument*. Sets and initializes. Default ~{2}~
+~1i~ load *1nstrument*. Sets and initializes. Default ~{2}~.
+Numbers used below because instruments typically consist of 1, 2, 3, 4, 5...
 
 ~2i~ set instrument. Sets w/o initializing.
 
@@ -130,14 +131,17 @@ intro [body]   a song with an intro and body
 
 ~4n~ sample length.
 
-~5n~ sample rate. Controls how quickly phase ~{p}~ increases.
-Default 16000.
+~5n~ *5ample* rate. Controls how quickly phase ~{p}~ increases.
+Default 16000. Pitch at which A0 = 440.
 
 ~6n~ loop start relative to sample offset ~{3}~.
 
 ~7n~ loop length. Default is sample length ~{4}~.
 
 ~8L~ loop type. f=forward (default); p=pingpong; b=backward.
+In any looping mode, looping is achieved by modulus-ing the phase by the
+same size every time.
+In pingpong mode, phase ~{p}~ has doubled range and "folds" on itself.
 
 ~9n~ volume base multiplier = n / 100. Default 100 = 1x
 
@@ -157,7 +161,7 @@ Default 16000.
 ~Mi~ run premade *Macro* i.
 
 *** Patches
-Patches use a set of input/output fixed pairs: ~ef / gh / jk~.
+Patches use a set of input/output fixed pairs: ~EF / GH / JK~.
 Input data is read to each respective output per-sample.
 
 ~[E/G/J]*~ Input
@@ -209,3 +213,17 @@ Examples
 
 *** Unused
 ~uyl+-~ What could they be for?
+
+* Playback
+** Mixing procedure
+For each channel:
+ 1. If ~{p}~ (phase) is within sample, increase it according to ~{n}, {t}, {5}~.
+ 2. Fetch value ~{p}~ from current sample ~{3}, {4}~.
+ 3. Multiply that by ~{9}~, clip if ~{XC}~, and write into ~{0}~.
+ 4. Run all controllers in order E, G, J.
+ 5. Store the output value, seeable by controller in the next channel.
+
+After running all channels:
+ 1. Mix by multiplying channel output values by their amplitude ~{a}~.
+ 2. Store this value usably.
+ 3. Multiply that value by ~{V}~ and play it.
