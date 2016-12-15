@@ -125,7 +125,6 @@ intro [body]   a song with an intro and body
 ~0n~ live channel *0utput*. Set by song if ~4~ > 0 and ~5~ > 0.
 
 ~1i~ load *1nstrument*. Sets and initializes. Default ~2~.
-Numbers used below because instruments typically consist of 1, 2, 3, 4, 5...
 
 ~2i~ set instrument. Sets w/o initializing.
 
