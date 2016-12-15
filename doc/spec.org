@@ -133,7 +133,7 @@ intro [body]   a song with an intro and body
 ~4n~ sample length.
 
 ~5n~ *5ample* rate. Controls how quickly phase ~p~ increases.
-Pitch at which A0 = 440hz. Default 16000.
+Pitch at which A4 = 440hz. Default 16000.
 
 ~6n~ loop start relative to sample offset ~3~.
 
