@@ -1,10 +1,12 @@
 * Song Architecture
 ** Data Types
 *** Numbers
- - decimal floating-point numbers, counting from 1
- - ~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order
- - stacking; ~.1m~ considered valid, etc.
- - using only + or - will increment or decrement the value
+Numbers are decimal floating-point numbers, counting from 1.
+
+~8m, 8c, .8, 8, 80, 8h, 8k~ are all possible power levels, in order.
+They're stackable; ~.1m~ considered valid, etc.
+Using only + or - will increment or decrement the value.
+Numbers default to 0 unless otherwise specified.
 
 *** Boolean values
  - ~y/t/1~ true
@@ -15,6 +17,7 @@
 An id is short for a string name.
 Non-base32 chars are ignored.
 If you want to make an instrument unique, you can number it.
+Non-entered id's default to "0".
 
 examples
 #+BEGIN_EXAMPLE
@@ -118,20 +121,19 @@ intro [body]   a song with an intro and body
 ** List of Commands/Params
 *** Internal
 ~0n~ live channel output. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
-Default 0.
 
 ~1i~ load instrument. Sets and initializes. Default {2}
 
-~2i~ set instrument. Sets w/o initializing. Default 0.
+~2i~ set instrument. Sets w/o initializing.
 
-~3n~ sample offset in points. Default 0.
+~3n~ sample offset in points.
 
-~4n~ sample length. Default 0
+~4n~ sample length.
 
 ~5n~ sample rate. Controls how quickly phase ~{p}~ increases.
 Default 16000.
 
-~6n~ loop start. Default 0 = start of sample.
+~6n~ loop start relative to sample offset ~{3}~.
 
 ~7n~ loop length. Default is ~{4}~.
 
@@ -142,9 +144,9 @@ Default 16000.
 *** Playback
 ~an~ mixer volume. Ratio = n / 800. Default 100=1/8.
 
-~dn~ panning. d100=fully right, d-100 = fully left. Default 0.
+~dn~ panning. d100=fully right, d-100 = fully left.
 
-~tn~ tuning adjustment. t100=full note up. Default 0.
+~tn~ tuning adjustment. t100=full note up.
 
 ~pn~ live phase in points. Set if {4} > 0  and {5} > 0.
 
@@ -152,7 +154,7 @@ Default 16000.
 
 ~c*~ "create" macro * and run it here.
 
-~mi~ Run macro i. Default 0.
+~mi~ Run macro i.
 
 *** Patches
 input/output fixed pairs: ~ef / gh / jk~
