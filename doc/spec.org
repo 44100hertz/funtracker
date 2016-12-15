@@ -32,6 +32,36 @@ examples
   0 = 0that
   1 = 1this
 #+END_EXAMPLE
+*** Macros
+Macros are executed at one tick per command.
+In order to have playback, a channel actually always has an active macro.
+
+Syntax
+#+BEGIN_EXAMPLE
+^i     simply set this macro to id i
+[num]  single-digit numbers play a note at base note + n, then tick
+.n     tick n times; default 1
++n     add n to the base note; default 1
+-n     subtract n from the base note; default 1
+>      add half an octave to the base note
+<      subtract half an octave from the base note
+N      new note
+O      note off
+K      note off, end macro here
+E      end macro (otherwise repeat)
+#+END_EXAMPLE
+
+Examples
+#+BEGIN_EXAMPLE
+037      arpeggio triplet
+<037     lower triplet
+N        repeat note forever
+.K       delay note off by 1
+.2K      delay note off by 2
++1       glissando up
+-1       glissando down
+#+END_EXAMPLE
+
 ** Samples
 Samples are headerless mono signed PCM in a separate file.
 
@@ -58,37 +88,6 @@ init          ; do the following on instrument load
 note          ; do the folowing on each note played
   p0          ; play from start of sample
   a50         ; start at 50% mixer volume
-#+END_EXAMPLE
-
-** Macros
-A list of note macros is defined for each song.
-Macros are executed at one tick per command.
-
-Syntax
-#+BEGIN_EXAMPLE
-^i     simply set this macro to id i
-[num]  single-digit numbers play a note at base note + n, then tick
-.n     tick n times; default 1
-+n     add n to the base note; default 1
--n     subtract n from the base note; default 1
->      add half an octave to the base note
-<      subtract half an octave from the base note
-N      new note
-O      note off
-K      note off, end macro here
-E      end macro (otherwise repeat)
-#+END_EXAMPLE
-
-Examples
-#+BEGIN_EXAMPLE
-^GR8     load predefined macro with id GR8 here
-037      arpeggio triplet
-<037     lower triplet
-N        repeat note forever
-.K       delay note off by 1
-.2K      delay note off by 2
-+1       glissando up
--1       glissando down
 #+END_EXAMPLE
 
 ** Song data

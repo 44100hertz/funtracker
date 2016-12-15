@@ -13,9 +13,6 @@ instruments
   square
     init '31h 4255
 
-macros
-  arpeg '037
-
 patterns
   intro
     C-4 1pian
@@ -26,6 +23,6 @@ patterns
     E-4 .....
     G-4 .....
   b
-    C-4 marp.
-    E-4 marp.
-    E-4 marp.
+    C-4 M037.
+    E-4 M037.
+    E-4 M037.
