@@ -120,9 +120,9 @@ intro [body]   a song with an intro and body
 #+END_EXAMPLE
 ** List of Commands/Params
 *** Internal
-~0n~ live channel _0utput_. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
+~0n~ live channel *0utput*. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
 
-~1i~ load _1nstrument_. Sets and initializes. Default ~{2}~
+~1i~ load *1nstrument*. Sets and initializes. Default ~{2}~
 
 ~2i~ set instrument. Sets w/o initializing.
 
@@ -142,19 +142,19 @@ Default 16000.
 ~9n~ volume base multiplier = n / 100. Default 100 = 1x
 
 *** Playback
-~An~ _Amplitude_; mixer volume. Ratio = n / 800. Default 100=1/8.
+~An~ *Amplitude*; mixer volume. Ratio = n / 800. Default 100=1/8.
 
-~Dn~ panning _Direction_. d100=fully right, d-100 = fully left.
+~Dn~ panning *Direction*. d100=fully right, d-100 = fully left.
 
-~Tn~ _Tuning_ adjustment. t100=full note up.
+~Tn~ *Tuning* adjustment. t100=full note up.
 
-~Pn~ live _Phase_ in points. Set if ~{4}~ > 0  and ~{5}~ > 0.
+~Pn~ live *Phase* in points. Set if ~{4}~ > 0  and ~{5}~ > 0.
 
-~Nn~ whole _Note_ pitch, typically set by note column. Rounds to integers.
+~Nn~ whole *Note* pitch, typically set by note column. Rounds to integers.
 
-~CM~ _Create_ new macro M and run it here.
+~CM~ *Create* new macro M and run it here.
 
-~Mi~ run premade _Macro_ i.
+~Mi~ run premade *Macro* i.
 
 *** Patches
 Patches use a set of input/output fixed pairs: ~ef / gh / jk~.
@@ -194,18 +194,18 @@ Examples
 *** Channel Misc
 ~Wn~ sample rate at which to grab history, default 16000
 
-~XCb~ _Clipping_ mode for mixer, 1=limit to [-1, 1]
+~XCb~ *Clipping* mode for mixer, 1=limit to [-1, 1]
 
 *** Control
-~JRn~ next _row jump_
+~JRn~ next *row jump*
 
-~JPn~ next _pattern jump_
+~JPn~ next *pattern jump*
 
-~Bn~ song _BPM_
+~Bn~ song *BPM*
 
-~Rn~ set speed _rate_ in ticks per row
+~Rn~ set speed *rate* in ticks per row
 
-~Vn~ global _volume_
+~Vn~ global *volume*
 
 *** Unused
 ~uyl+-~ What could they be for?
