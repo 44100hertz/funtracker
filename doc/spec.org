@@ -66,25 +66,27 @@ Macros are executed at one tick per command.
 
 Syntax
 #+BEGIN_EXAMPLE
+^i     simply set this macro to id i
 [num]  single-digit numbers play a note at base note + n, then tick
 .n     tick n times; default 1
 +n     add n to the base note; default 1
 -n     subtract n from the base note; default 1
 >      add half an octave to the base note
 <      subtract half an octave from the base note
-n      new note before next tick
-o      note off after next tick
-k      note off after next tick, end macro here
-e      end macro (otherwise repeat)
+N      new note
+O      note off
+K      note off, end macro here
+E      end macro (otherwise repeat)
 #+END_EXAMPLE
 
 Examples
 #+BEGIN_EXAMPLE
+^GR8     load predefined macro with id GR8 here
 037      arpeggio triplet
 <037     lower triplet
-n        repeat note forever
-k        delay note off by 1
-.k       delay note off by 2
+N        repeat note forever
+.K       delay note off by 1
+.2K      delay note off by 2
 +1       glissando up
 -1       glissando down
 #+END_EXAMPLE
@@ -120,9 +122,9 @@ intro [body]   a song with an intro and body
 #+END_EXAMPLE
 ** List of Commands/Params
 *** Internal
-~0n~ live channel *0utput*. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
+~0n~ live channel *0utput*. Set by song if ~4~ > 0 and ~5~ > 0.
 
-~1i~ load *1nstrument*. Sets and initializes. Default ~{2}~.
+~1i~ load *1nstrument*. Sets and initializes. Default ~2~.
 Numbers used below because instruments typically consist of 1, 2, 3, 4, 5...
 
 ~2i~ set instrument. Sets w/o initializing.
@@ -131,17 +133,17 @@ Numbers used below because instruments typically consist of 1, 2, 3, 4, 5...
 
 ~4n~ sample length.
 
-~5n~ *5ample* rate. Controls how quickly phase ~{p}~ increases.
+~5n~ *5ample* rate. Controls how quickly phase ~p~ increases.
 Default 16000. Pitch at which A0 = 440.
 
-~6n~ loop start relative to sample offset ~{3}~.
+~6n~ loop start relative to sample offset ~3~.
 
-~7n~ loop length. Default is sample length ~{4}~.
+~7n~ loop length. Default is sample length ~4~.
 
 ~8L~ loop type. f=forward (default); p=pingpong; b=backward.
 In any looping mode, looping is achieved by modulus-ing the phase by the
 same size every time.
-In pingpong mode, phase ~{p}~ has doubled range and "folds" on itself.
+In pingpong mode, phase ~p~ has doubled range and "folds" on itself.
 
 ~9n~ volume base multiplier = n / 100. Default 100 = 1x
 
@@ -152,13 +154,11 @@ In pingpong mode, phase ~{p}~ has doubled range and "folds" on itself.
 
 ~Tn~ *Tuning* adjustment. t100=full note up.
 
-~Pn~ live *Phase* in points. Set if ~{4}~ > 0  and ~{5}~ > 0.
+~Pn~ live *Phase* in points. Set if ~4~ > 0  and ~5~ > 0.
 
 ~Nn~ whole *Note* pitch, typically set by note column. Rounds to integers.
 
-~CM~ *Create* new macro M and run it here.
-
-~Mi~ run premade *Macro* i.
+~Mm~ *macro* m. Default ~0E~; play note once.
 
 *** Patches
 Patches use a set of input/output fixed pairs: ~EF / GH / JK~.
@@ -189,10 +189,10 @@ However, things that modify output do so right before mixing, and cannot be stac
 
 Examples
 #+BEGIN_EXAMPLE
-~G.... Ha-..~ volume slide down 1/10000 per point
-~G0... Hp...~ total phase modulation from channel 0
-~G0... Htw20~ frequency modulation from channel 0
-~G01k. H0w10~ mix 1000-sample delayed channel 0 into self
+~G.... HA-..~ volume slide down 1/10000 per point
+~G0... HP...~ total phase modulation from channel 0
+~G0... HTW20~ frequency modulation from channel 0
+~G01K. H0W10~ mix 1000-sample delayed channel 0 into self
 #+END_EXAMPLE
 
 *** Channel Misc
@@ -201,29 +201,37 @@ Examples
 ~XCb~ *Clipping* mode for mixer, 1=limit to [-1, 1]
 
 *** Control
-~JRn~ next *row jump*
+~JRn~ next *Row Jump*
 
-~JPn~ next *pattern jump*
+~JPn~ next *Pattern Jump*
 
 ~Bn~ song *BPM*
 
-~Rn~ set speed *rate* in ticks per row
+~Rn~ set row *Rate*; ticks per row
 
 ~Vn~ global *volume*
 
 *** Unused
-~uyl+-~ What could they be for?
+~MUYL+-<>^~ What could they be for?
 
 * Playback
 ** Mixing procedure
 For each channel:
- 1. If ~{p}~ (phase) is within sample, increase it according to ~{n}, {t}, {5}~.
- 2. Fetch value ~{p}~ from current sample ~{3}, {4}~.
- 3. Multiply that by ~{9}~, clip if ~{XC}~, and write into ~{0}~.
+ 1. If ~P~ (phase) is within sample, increase it according to ~N~, ~T~, ~5~.
+ 2. Fetch value ~p~ from current sample ~3~, ~4~.
+ 3. Multiply that by ~9~, clip if ~XC~, and write into ~0~.
  4. Run all controllers in order E, G, J.
  5. Store the output value, seeable by controller in the next channel.
 
 After running all channels:
- 1. Mix by multiplying channel output values by their amplitude ~{a}~.
+ 1. Mix by multiplying channel output values by their amplitude ~a~ and pan ~d~.
  2. Store this value usably.
- 3. Multiply that value by ~{V}~ and play it.
+ 3. Multiply that value by ~V~ and play it.
+
+** On each row
+ 1. Set position to ~JR~, ~JP~.
+ 2. Set ~JR~, ~JP~ according to order.
+ 3. If command ~1~, run specified instrument, clear ~1~, and set ~2~.
+ 4. If note, set ~N~. If key-off, set macro to "~K~", else ~M~.
+ 5. Run row command.
+ 6. Set intervals for the given BPM ~B~, tickrate, and row rate ~R~.
