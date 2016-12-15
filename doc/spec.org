@@ -189,10 +189,10 @@ However, things that modify output do so right before mixing, and cannot be stac
 
 Examples
 #+BEGIN_EXAMPLE
-~G.... HA-..~ volume slide down 1/10000 per point
-~G0... HP...~ total phase modulation from channel 0
-~G0... HTW20~ frequency modulation from channel 0
-~G01K. H0W10~ mix 1000-sample delayed channel 0 into self
+G.... HA-..  volume slide down 1/10000 per point
+G0... HP...  total phase modulation from channel 0
+G0... HTW20  frequency modulation from channel 0
+G01K. H0W10  mix 1000-sample delayed channel 0 into self
 #+END_EXAMPLE
 
 *** Channel Misc
