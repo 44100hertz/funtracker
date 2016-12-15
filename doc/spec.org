@@ -9,12 +9,16 @@ Using only + or - will increment or decrement the value.
 Numbers default to 0 unless otherwise specified.
 
 *** Bools
- - ~y/t/1~ true
- - ~n/f/0~ false
- - will always normalize to 0/1 after entry
+~y/t/1~ is true. ~n/f/0~ false.
 
 *** id's
-An id is short for a string name.
+id's are in a base32, which is [0-9], plus [A-Z] minus O, I, Z, and S.
+However, all of [A-Z], [a-z], and [0-9] are considered valid.
+Lowercase chars are converted to uppercase, and O->0, I->1, Z->2, and S->5.
+It is best to simply enter what's comfortable, rather than matching the display.
+A direct listing of id's is in res/base32.
+
+An id is typically short for a string name.
 Non-base32 chars are ignored.
 If you want to make an instrument unique, you can number it.
 Non-entered id's default to "0".
@@ -29,12 +33,12 @@ examples
   thi, ... = this
 
 "0that", "1this"
-  0 = 0that
-  1 = 1this
+  o = 0that
+  i = 1this
 #+END_EXAMPLE
 *** Macros
-Macros are executed at one tick per command.
-In order to have playback, a channel actually always has an active macro.
+Macros are playback commands executed one tick per command.
+Every channel always has an active macro.
 
 Syntax
 #+BEGIN_EXAMPLE
@@ -61,9 +65,6 @@ N        repeat note forever
 +1       glissando up
 -1       glissando down
 #+END_EXAMPLE
-
-** Samples
-Samples are headerless mono signed PCM in a separate file.
 
 ** Instruments
 Instruments are commands that replace any part of the channel state.
@@ -211,13 +212,13 @@ G01K. H0W10  mix 1000-sample delayed channel 0 into self
 ~Vn~ global *volume*
 
 *** Unused
-~MUYL+-<>^~ What could they be for?
+~CLQUY<>+-^.~ What could they be for?
 
 * Playback
 ** Mixing procedure
 For each channel:
  1. If ~P~ (phase) is within sample, increase it according to ~N~, ~T~, ~5~.
- 2. Fetch index ~p~ from current sample ~3~, ~4~.
+ 2. Fetch index ~P~ from current sample ~3~, ~4~.
  3. Multiply that by ~9~, clip if ~XC~, and write into ~0~.
  4. Run all controllers in order E, G, J.
  5. Store the output value, seeable by controller in the next channel.
