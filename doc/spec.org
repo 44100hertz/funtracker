@@ -8,7 +8,7 @@ They're stackable; ~.1m~ considered valid, etc.
 Using only + or - will increment or decrement the value.
 Numbers default to 0 unless otherwise specified.
 
-*** Boolean values
+*** Bools
  - ~y/t/1~ true
  - ~n/f/0~ false
  - will always normalize to 0/1 after entry
@@ -120,9 +120,9 @@ intro [body]   a song with an intro and body
 #+END_EXAMPLE
 ** List of Commands/Params
 *** Internal
-~0n~ live channel output. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
+~0n~ live channel _0utput_. Set by song if ~{4}~ > 0 and ~{5}~ > 0.
 
-~1i~ load instrument. Sets and initializes. Default {2}
+~1i~ load _1nstrument_. Sets and initializes. Default ~{2}~
 
 ~2i~ set instrument. Sets w/o initializing.
 
@@ -135,67 +135,77 @@ Default 16000.
 
 ~6n~ loop start relative to sample offset ~{3}~.
 
-~7n~ loop length. Default is ~{4}~.
+~7n~ loop length. Default is sample length ~{4}~.
 
 ~8L~ loop type. f=forward (default); p=pingpong; b=backward.
 
 ~9n~ volume base multiplier = n / 100. Default 100 = 1x
 
 *** Playback
-~an~ mixer volume. Ratio = n / 800. Default 100=1/8.
+~An~ _Amplitude_; mixer volume. Ratio = n / 800. Default 100=1/8.
 
-~dn~ panning. d100=fully right, d-100 = fully left.
+~Dn~ panning _Direction_. d100=fully right, d-100 = fully left.
 
-~tn~ tuning adjustment. t100=full note up.
+~Tn~ _Tuning_ adjustment. t100=full note up.
 
-~pn~ live phase in points. Set if {4} > 0  and {5} > 0.
+~Pn~ live _Phase_ in points. Set if ~{4}~ > 0  and ~{5}~ > 0.
 
-~nn~ whole note pitch, typically set by note column.
+~Nn~ whole _Note_ pitch, typically set by note column. Rounds to integers.
 
-~c*~ "create" macro * and run it here.
+~CM~ _Create_ new macro M and run it here.
 
-~mi~ Run macro i.
+~Mi~ run premade _Macro_ i.
 
 *** Patches
-input/output fixed pairs: ~ef / gh / jk~
+Patches use a set of input/output fixed pairs: ~ef / gh / jk~.
+Input data is read to each respective output per-sample.
 
-~[e/g/j]*~ input
- - ~cn~ constant value n (default 1)
- - ~[num]d~ channel num, delay d in ms
- - ~ad~ the final mix, delay d in ms
- - ~ln~ an LFO n ticks per sample
-
-~[f/h/k]O*~ output
- - ~O~ output param to modify
- - ~*~ modify method
-   - ~=n~ input * n/100; default 100=1.0
-   - ~wn~ wet/dry mix;  0=dry, 100=wet; default=50
-   - ~+n~ base + input * n/{5}, default 1 = +1/{5}
-   - ~-n~ base - input * n/{5}, default 1 = -1/{5}
-
-examples
+~[E/G/J]*~ Input
 #+BEGIN_EXAMPLE
-~g.... ha-..~ volume slide down 1/10000 per point
-~g0... hp...~ total phase modulation from channel 0
-~g0... htw20~ frequency modulation from channel 0
-~g01k. h0w10~ mix 1000-sample delayed channel 0 into self
+Cn      constant value n (default 1)
+[num]d  channel num, delay d in ms
+Ad      the final mix, delay d in ms
+Ln      an LFO n ticks per sample
+#+END_EXAMPLE
+
+~[F/H/K]O*~ Output
+#+BEGIN_EXAMPLE
+ O   output param to modify
+ *   modify method
+   wn   output = wet/dry mix;  0=dry, 100=wet; default=50
+   >n   output = base + input * n/100
+   <n   output = base - input * n/100
+   =n   base = input * n/100; default 100=1.0
+   +n   base = base + input * n/sample rate, default 1 = 1 second from 0 -> 1
+   -n   base = base - input * n/sample rate, default 1 = 1 second from 1 -> 0
+#+END_EXAMPLE
+Things that modify the base will repeatedly and instantly modify.
+This is affected by sample rate, and is divided by it for consistency.
+However, things that modify output do so right before mixing, and cannot be stacked.
+
+Examples
+#+BEGIN_EXAMPLE
+~G.... Ha-..~ volume slide down 1/10000 per point
+~G0... Hp...~ total phase modulation from channel 0
+~G0... Htw20~ frequency modulation from channel 0
+~G01k. H0w10~ mix 1000-sample delayed channel 0 into self
 #+END_EXAMPLE
 
 *** Channel Misc
-~wn~ sample rate at which to grab history, default 16000
+~Wn~ sample rate at which to grab history, default 16000
 
-~xcb~ clipping mode for mixer, 1=limit to [-1, 1]
+~XCb~ _Clipping_ mode for mixer, 1=limit to [-1, 1]
 
 *** Control
-~jjn~ next row
+~JRn~ next _row jump_
 
-~jpn~ next pattern
+~JPn~ next _pattern jump_
 
-~bn~ song BPM
+~Bn~ song _BPM_
 
-~rn~ set speed "rate" in ticks per row
+~Rn~ set speed _rate_ in ticks per row
 
-~vn~ global volume
+~Vn~ global _volume_
 
 *** Unused
 ~uyl+-~ What could they be for?
