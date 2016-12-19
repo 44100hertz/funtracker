@@ -1,0 +1,6 @@
+[package]
+name = "funtracker"
+version = "0.1.0"
+authors = ["Sam Pagenkopf <ssaammp@gmail.com>"]
+
+[dependencies]
