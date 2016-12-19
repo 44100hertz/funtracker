@@ -72,18 +72,18 @@ They can have arbitrary precision/size; for example 48.3002 is valid here.
 
 Example
 #+BEGIN_EXAMPLE
-  init: 3 41h 548k 6 7 8 9 g ha-
+  init: 2 31h 4 5 648k 7 Lf g ha-
   note: p a50
 #+END_EXAMPLE
 
 Inferred meaning
 #+BEGIN_EXAMPLE
 init          ; do the following on instrument load
-  30 4100     ; 100 long sample at 0
-  548000      ; sample rate 48khz
-  60 7100     ; loop entire sample
-  8f          ; loop forward
-  9100        ; no volume adjustment
+  20 3100     ; 100 long sample at 0
+  40 5100     ; loop entire sample
+  648000      ; sample rate 48khz
+  7100        ; no volume adjustment
+  Lf          ; loop forward
   gc1 ha-1    ; patch to ramp volume down over 1 second
 
 note          ; do the folowing on each note played
@@ -121,49 +121,47 @@ Examples
 intro [body]   a song with an intro and body
 #+END_EXAMPLE
 ** List of Commands/Params
-*** Internal
-~0n~ live channel *0utput*. Set by song if ~4~ > 0 and ~5~ > 0.
+*** Instrument params
+~0~ current instrument. Sets w/o initializing.
 
-~1i~ load *1nstrument*. Sets and initializes. Default ~2~.
+~1~ load *Instrument*. Sets and initializes. Default ~0~.
 
-~2i~ set instrument. Sets w/o initializing.
+~2~ sample offset.
 
-~3n~ sample offset in points.
+~3~ sample length.
 
-~4n~ sample length.
+~4~ loop start relative to sample offset ~3~.
 
-~5n~ *5ample* rate. Controls how quickly phase ~p~ increases.
+~5~ loop length. Default is sample length ~4~.
+
+~6~ Sample rate. Controls how quickly phase ~p~ increases.
 Pitch at which A4 = 440hz. Default 16000.
 
-~6n~ loop start relative to sample offset ~3~.
+~7~ volume base multiplier = n / 100. Default 100 = 1x
 
-~7n~ loop length. Default is sample length ~4~.
-
-~8L~ loop type. f=forward (default); p=pingpong; b=backward.
+~L~ loop type. f=forward (default); p=pingpong; b=backward.
 In any looping mode, looping is achieved by modulus-ing the phase by the
 same size every time.
 In pingpong mode, phase ~p~ has doubled range and "folds" on itself.
 
-~9n~ volume base multiplier = n / 100. Default 100 = 1x
+*** Live params
+~8~ live channel output. Set by song if ~4~ > 0 and ~5~ > 0.
 
-*** Playback
-~An~ *Amplitude*; mixer volume. Ratio = n / 800. Default 100=1/8.
+~9~ live phase in points. Set if ~4~ > 0  and ~5~ > 0.
 
-~Dn~ panning *Direction*. d100=fully right, d-100 = fully left.
+~A~ *Amplitude*; mixer volume. Ratio = n / 800. Default 100=1/8.
 
-~Tn~ *Tuning* adjustment. t100=full note up.
+~P~ *Panning*. d100=fully right, d-100 = fully left.
 
-~Pn~ live *Phase* in points. Set if ~4~ > 0  and ~5~ > 0.
+~N~ whole *Note* pitch, typically set by note column. Rounds to integers.
 
-~Nn~ whole *Note* pitch, typically set by note column. Rounds to integers.
+~F~ *Fine Tuning* adjustment. t100=full note up.
 
-~Mm~ *macro* m. Default ~0E~; play note once.
-
-*** Patches
+*** Meta Params
 Patches use a set of input/output fixed pairs: ~EF / GH / JK~.
 Input data is read to each respective output per-sample.
 
-~[E/G/J]*~ Input
+~E, G, J~ Input
 #+BEGIN_EXAMPLE
 Cn      constant value n (default 1)
 [num]d  channel num, delay d in ms
@@ -171,7 +169,7 @@ Ad      the final mix, delay d in ms
 Ln      an LFO n ticks per sample
 #+END_EXAMPLE
 
-~[F/H/K]O*~ Output
+~F, H, K~ Output
 #+BEGIN_EXAMPLE
  O   output param to modify
  *   modify method
@@ -194,24 +192,26 @@ G0... HTW20  frequency modulation from channel 0
 G01K. H0W10  mix 1000-sample delayed channel 0 into self
 #+END_EXAMPLE
 
-*** Channel Misc
-~Wn~ sample rate at which to grab history, default 16000
+~M~ *Macro*. Default ~0E~; play note once.
 
-~XCb~ *Clipping* mode for mixer, 1=limit to [-1, 1]
+*** Channel Misc
+~H~ sample rate at which to grab *History*, default 16000
+
+~C~ *Clipping* level for mixer, 100=limit to [-1, 1], etc.
 
 *** Control
-~JRn~ next *Row Jump*
+~J~ next row; *Jump*
 
-~JPn~ next *Pattern Jump*
+~K~ next pattern
 
-~Bn~ song *BPM*
+~B~ song *BPM*
 
-~Rn~ set row *Rate*; ticks per row
+~R~ set row *Rate*; ticks per row
 
-~Vn~ global *volume*
+~V~ global *volume*
 
 *** Unused
-~CLQUY<>+-^.~ What could they be for?
+~DQSTUWX<>+-^.~ What could they be for?
 
 * Playback
 ** Mixing procedure
