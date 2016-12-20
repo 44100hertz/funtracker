@@ -1,31 +1,8 @@
-* Format parsing
-** TODO Commands
-*** DONE design
-*** TODO tests
-*** TODO code
-** TODO Instruments
-*** DONE design
-*** TODO tests
-*** TODO code
-** TODO Macros
-*** DONE design
-*** TODO tests
-*** TODO code
-
-* Replayer basics
-** TODO Sound
-*** TODO play any sound at all
-*** TODO play pitched waves
-** TODO API for replayer / parser / editor
-*** TODO design
-*** TODO tests
-*** TODO code
-
-* Editor basics
-** TODO UI
-*** TODO get anything onscreen
-*** TODO draw scalable, colored, monospace plaintext
-** TODO Editing
-*** TODO design keybinds / workflow
-*** TODO basic input, menus
-*** TODO live command parsing/completion
+* Vertical Slice 1
+Read one sequence of single-channel, unformatted song data with basic commands.
+Then, output a square wave music file.
+** TODO Micro Goals
+*** DONE Channel concept
+*** TODO Song concept
+*** TODO File I/O
+*** TODO Generate note pitches
