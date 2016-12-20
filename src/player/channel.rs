@@ -10,7 +10,7 @@ struct Channel {
 }
 
 impl Channel {
-    fn update(&mut self, &song: Song) -> f32 {
+    fn update(&mut self) -> f32 {
         // Increase phase by 1 per sample rate
         self.Phase = (self.Phase + 1) % self.SampLen;
         // Make a square wave
