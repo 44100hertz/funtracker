@@ -1,19 +1,21 @@
-struct Channel {
-    SampOff: u32,
-    SampLen: u32,
-    SampRate: f32,
+pub struct Channel {
+    pub samp_off: u32,
+    pub samp_len: u32,
+    pub samp_rate: f32,
 
-    Wave: f32,
-    Phase: f32,
-    Volume: f32,
-    Note: u32,
+    pub wave: f32,
+    pub phase: f32,
+    pub volume: f32,
+    pub note: u32,
 }
 
 impl Channel {
-    fn update(&mut self) -> f32 {
+    pub fn update(&mut self) {
         // Increase phase by 1 per sample rate
-        self.Phase = (self.Phase + 1) % self.SampLen;
+        self.phase = (self.phase + 1f32) % (self.samp_len as f32);
         // Make a square wave
-        self.Wave = if self.Phase > (self.SampLen / 2) {1} else {-1};
+        self.wave =
+            if self.phase > (self.samp_len / 2) as f32 {1f32}
+            else {-1f32};
     }
 }
