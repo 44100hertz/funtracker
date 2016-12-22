@@ -4,3 +4,6 @@ mod tests {
     fn it_works() {
     }
 }
+
+pub mod channel;
+pub mod song;
