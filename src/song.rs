@@ -5,14 +5,6 @@ pub struct Song {
 }
 
 impl Song {
-    pub fn get_chunk(&mut self, size: u32) -> Vec<f32> {
-        let mut chunk = Vec::new();
-        for _ in 0..size {
-            chunk.push(self.get_point());
-        }
-        chunk
-    }
-
     pub fn get_point(&mut self) -> f32 {
         // Update channel states
         for c in &mut self.channels {
