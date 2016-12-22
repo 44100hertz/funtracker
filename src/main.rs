@@ -1,5 +1,8 @@
 mod song;
 mod channel;
+mod output;
+
+use output::SoundPlayer;
 
 fn main() {
     let mut sng = song::Song {
@@ -10,13 +13,15 @@ fn main() {
                 samp_rate: 0f32,
                 wave: 0f32,
                 phase: 0f32,
-                volume: 1f32,
+                volume: 0.5f32,
                 note: 0,
-            }
+            },
         ]
     };
 
-    for _ in 1..100 {
-        println!("{}", sng.update());
+    let mut out = output::rawpcm::RawPCM::open("testout.pcmf32");
+
+    for _ in 1..10000 {
+        out.play(sng.update());
     }
 }

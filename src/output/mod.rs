@@ -1,6 +1,5 @@
 pub mod rawpcm;
 
-trait SoundPlayer {
-    fn open(&mut self);
+pub trait SoundPlayer {
     fn play(&mut self, data: f32);
 }
