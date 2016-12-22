@@ -5,5 +5,5 @@ mod tests {
     }
 }
 
-pub mod channel;
-pub mod song;
+pub mod output;
+pub mod player;

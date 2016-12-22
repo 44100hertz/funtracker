@@ -10,7 +10,7 @@ pub struct Channel {
 }
 
 impl Channel {
-    pub fn update(&mut self) {
+    pub fn get_point(&mut self) {
         self.phase = (self.phase + 1f32) % (self.samp_len as f32);
         // Make a square wave
         self.wave =

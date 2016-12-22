@@ -1,7 +1,7 @@
 extern crate sdl2;
 use self::sdl2::audio::{AudioCallback};
 
-use song::Song;
+use player::song::Song;
 
 pub struct Output {
     pub song: Song,

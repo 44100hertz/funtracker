@@ -1,4 +1,4 @@
-use channel::Channel;
+use player::channel::Channel;
 
 pub struct Song {
     pub channels: Vec<Channel>,
@@ -8,7 +8,7 @@ impl Song {
     pub fn get_point(&mut self) -> f32 {
         // Update channel states
         for c in &mut self.channels {
-            c.update();
+            c.get_point();
         }
 
         // Make final mix

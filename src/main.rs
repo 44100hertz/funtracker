@@ -2,16 +2,17 @@ extern crate sdl2;
 use self::sdl2::audio::{AudioSpecDesired};
 use std::time::Duration;
 
-mod song;
-mod channel;
-mod output;
+mod player;
+use player::song::Song;
+use player::channel::Channel;
 
+mod output;
 use output::Output;
 
 fn main() {
-    let sng = song::Song {
+    let sng = Song {
         channels: vec![
-            channel::Channel {
+            Channel {
                 samp_off: 0,
                 samp_len: 200,
                 samp_rate: 0f32,
