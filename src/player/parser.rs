@@ -10,7 +10,7 @@ pub fn parse_note(note: &str) -> i32 {
         'G' => 7,
         'A' => 9,
         'B' => 11,
-        _ => 0,
+        _ => return -1,
     };
 
     let accidental_offset = match chars.next().unwrap() {

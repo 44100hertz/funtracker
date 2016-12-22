@@ -19,7 +19,8 @@ pub fn char_to_base32(c: char) -> char {
 pub fn string_to_base32(s: &str) -> String {
     let mut outstr = "".to_string();
     for c in s.chars() {
-        outstr.push(char_to_base32(c));
+        let b32: char = char_to_base32(c);
+        if b32 != '.' {outstr.push(b32);}
     };
     outstr
 }

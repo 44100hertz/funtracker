@@ -20,6 +20,12 @@ mod tests {
     }
 
     #[test]
+    fn invalid_note() {
+        let note = parser::parse_note("a lemon");
+        assert_eq!(note, -1)
+    }
+
+    #[test]
     fn base32_zero() {
         let zero = base32::char_to_base32('o');
         assert_eq!(zero, '0')
