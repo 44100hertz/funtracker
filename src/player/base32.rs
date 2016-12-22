@@ -7,11 +7,19 @@
 pub fn char_to_base32(c: char) -> char {
     match c {
         '0' | 'O' | 'o' => '0',
-        '1' | 'I' => '1',
-        '2' | 'Z' => '2',
-        '5' | 'S' => '5',
+        '1' | 'I' | 'i' => '1',
+        '2' | 'Z' | 'z' => '2',
+        '5' | 'S' | 's' => '5',
         '0'...'9' | 'A'...'Z' => c,
         'a'...'z' => c.to_uppercase().next().unwrap(),
         _ => '.',
     }
+}
+
+pub fn string_to_base32(s: &str) -> String {
+    let mut outstr = "".to_string();
+    for c in s.chars() {
+        outstr.push(char_to_base32(c));
+    };
+    outstr
 }
