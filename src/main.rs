@@ -21,7 +21,7 @@ fn main() {
 
     let mut out = output::rawpcm::RawPCM::open("testout.pcmf32");
 
-    for _ in 1..10000 {
-        out.play(sng.update());
+    for _ in 1..100 {
+        out.play(sng.get_chunk(256));
     }
 }

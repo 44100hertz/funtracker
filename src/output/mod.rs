@@ -1,5 +1,5 @@
 pub mod rawpcm;
 
 pub trait SoundPlayer {
-    fn play(&mut self, data: f32);
+    fn play(&mut self, data: Vec<f32>);
 }

@@ -9,11 +9,13 @@ pub struct RawPCM {
 }
 
 impl SoundPlayer for RawPCM {
-    fn play(&mut self, data: f32) {
+    fn play(&mut self, data: Vec<f32>) {
         unsafe {
-            let rawdata = mem::transmute::<f32, [u8; 4]>(data);
-            self.file.write_all(&rawdata)
-                .expect("could not write file");
+            for d in data {
+                let bytes = mem::transmute::<f32, [u8; 4]>(d);
+                self.file.write_all(&bytes)
+                    .expect("could not write file");
+            }
         }
     }
 }
