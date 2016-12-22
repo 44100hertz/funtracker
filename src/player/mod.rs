@@ -30,4 +30,10 @@ mod tests {
         let zero = base32::char_to_base32('o');
         assert_eq!(zero, '0')
     }
+
+    #[test]
+    fn parse_field() {
+        let field = parser::parse_field("C-4 A1234");
+        assert_eq!(field.note, 48);
+    }
 }
