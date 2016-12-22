@@ -1,18 +1,25 @@
 use player::base32;
 
 pub struct Field {
-    pub note: Result<i32, ()>,
-    pub command: char,
-    pub value: f32,
+    pub note: Option<i32>,
+    pub command: Option<char>,
+    pub value: Option<f32>,
 }
 
 /// parse field with syntax N-O cXXXX
 pub fn parse_field(field: &str) -> Field {
     let note = parse_note(&field[0..3]);
-    let command =
-        base32::char_to_base32(field.as_bytes()[4] as char);
-    let value: f32 = *&field[5..9].parse()
-        .expect("cannot parse field value");
+
+    let value: Option<f32>;
+    let command = base32::char_to_base32(field.as_bytes()[4] as char);
+    if command.is_some() {
+        value = Some(
+            *&field[5..9].parse()
+                .expect("invalid command")
+        );
+    } else {
+        value = None;
+    }
 
     Field {
         note: note,
@@ -22,7 +29,7 @@ pub fn parse_field(field: &str) -> Field {
 }
 
 /// Return a midi note from a string e.g. "C-4"
-pub fn parse_note(note: &str) -> Result<i32, ()> {
+pub fn parse_note(note: &str) -> Option<i32> {
     let bytes = note.as_bytes();
 
     let letter_offset = match bytes[0] as char {
@@ -33,7 +40,7 @@ pub fn parse_note(note: &str) -> Result<i32, ()> {
         'G' => 7,
         'A' => 9,
         'B' => 11,
-        _ => return Err(()),
+        _ => return None,
     };
 
     let accidental_offset = match bytes[1] as char {
@@ -44,5 +51,5 @@ pub fn parse_note(note: &str) -> Result<i32, ()> {
     let octave = (bytes[2] as char).to_digit(10)
         .expect("octave not a char");
 
-    Ok(octave as i32 * 12 + letter_offset + accidental_offset)
+    Some(octave as i32 * 12 + letter_offset + accidental_offset)
 }

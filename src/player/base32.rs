@@ -4,23 +4,14 @@
 /// G H J K L M N P
 /// Q R T U V W X Y
 
-pub fn char_to_base32(c: char) -> char {
+pub fn char_to_base32(c: char) -> Option<char> {
     match c {
-        '0' | 'O' | 'o' => '0',
-        '1' | 'I' | 'i' => '1',
-        '2' | 'Z' | 'z' => '2',
-        '5' | 'S' | 's' => '5',
-        '0'...'9' | 'A'...'Z' => c,
-        'a'...'z' => c.to_uppercase().next().unwrap(),
-        _ => '.',
+        '0' | 'O' | 'o' => Some('0'),
+        '1' | 'I' | 'i' => Some('1'),
+        '2' | 'Z' | 'z' => Some('2'),
+        '5' | 'S' | 's' => Some('5'),
+        '0'...'9' | 'A'...'Z' => Some(c),
+        'a'...'z' => c.to_uppercase().next(),
+        _ => None,
     }
-}
-
-pub fn string_to_base32(s: &str) -> String {
-    let mut outstr = "".to_string();
-    for c in s.chars() {
-        let b32: char = char_to_base32(c);
-        if b32 != '.' {outstr.push(b32);}
-    };
-    outstr
 }
