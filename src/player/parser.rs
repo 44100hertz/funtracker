@@ -1,7 +1,7 @@
 use player::base32;
 
 pub struct Field {
-    pub note: i32,
+    pub note: Result<i32, ()>,
     pub command: char,
     pub value: f32,
 }
@@ -22,7 +22,7 @@ pub fn parse_field(field: &str) -> Field {
 }
 
 /// Return a midi note from a string e.g. "C-4"
-pub fn parse_note(note: &str) -> i32 {
+pub fn parse_note(note: &str) -> Result<i32, ()> {
     let bytes = note.as_bytes();
 
     let letter_offset = match bytes[0] as char {
@@ -33,7 +33,7 @@ pub fn parse_note(note: &str) -> i32 {
         'G' => 7,
         'A' => 9,
         'B' => 11,
-        _ => return -1,
+        _ => return Err(()),
     };
 
     let accidental_offset = match bytes[1] as char {
@@ -44,5 +44,5 @@ pub fn parse_note(note: &str) -> i32 {
     let octave = (bytes[2] as char).to_digit(10)
         .expect("octave not a char");
 
-    octave as i32 * 12 + letter_offset + accidental_offset
+    Ok(octave as i32 * 12 + letter_offset + accidental_offset)
 }
