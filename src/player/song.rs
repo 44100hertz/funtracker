@@ -1,3 +1,5 @@
+use player::parser;
+
 pub struct Field {
     pub note: Option<i32>,
     pub command: Option<char>,
@@ -43,9 +45,9 @@ impl Channel {
 }
 
 impl Song {
-    pub fn new(num_channels: i32) -> Song {
+    pub fn new(seq: &str, num_channels: i32) -> Song {
         Song {
-            track: Vec::new(),
+            track: parser::parse_seq(seq),
             channels: {
                 let mut tmp = Vec::new();
                 for _ in 0..num_channels {tmp.push(Channel::new());}

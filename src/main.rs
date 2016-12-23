@@ -6,18 +6,19 @@ use player::song::{Song, Field};
 mod audio;
 use audio::Audio;
 
+use std::fs::File;
+use std::io::Read;
+
 fn main() {
     let sdl_context = sdl2::init()
         .expect("failed to init sdl2");
 
-    let mut song = Song::new(1);
+    let mut trackfile = File::open("res/parse-test1")
+        .expect("could not open test parsing file");
+    let mut s = String::new();
+    trackfile.read_to_string(&mut s);
 
-    song.track = vec![
-        Field { note: Some(48), command: None, value: None },
-        Field { note: Some(50), command: None, value: None },
-        Field { note: Some(52), command: None, value: None },
-        Field { note: Some(54), command: None, value: None },
-    ];
+    let mut song = Song::new(&s, 1);
 
     let mut out = Audio::new(sdl_context, 48000);
     out.play_song(song);
