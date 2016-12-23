@@ -4,24 +4,24 @@ pub struct Field {
     pub value: Option<f32>,
 }
 
-pub struct Channel {
-    pub samp_off: u32,
-    pub samp_len: u32,
-    pub samp_rate: f32,
+struct Channel {
+    samp_off: u32,
+    samp_len: u32,
+    samp_rate: f32,
 
-    pub wave: f32,
-    pub phase: f32,
-    pub volume: f32,
-    pub note: u32,
+    wave: f32,
+    phase: f32,
+    volume: f32,
+    note: u32,
 }
 
 pub struct Song {
     pub track: Vec<Field>,
-    pub channels: Vec<Channel>,
+    channels: Vec<Channel>,
 }
 
 impl Channel {
-    pub fn new() -> Channel {
+    fn new() -> Channel {
         Channel {
             samp_off: 0,
             samp_len: 0,
@@ -43,10 +43,14 @@ impl Channel {
 }
 
 impl Song {
-    pub fn new() -> Song {
+    pub fn new(num_channels: i32) -> Song {
         Song {
             track: Vec::new(),
-            channels: Vec::new(),
+            channels: {
+                let mut tmp = Vec::new();
+                for _ in 0..num_channels {tmp.push(Channel::new());}
+                tmp
+            },
         }
     }
 
