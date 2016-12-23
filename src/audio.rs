@@ -45,6 +45,6 @@ impl Audio {
             .expect("could not open playback");
 
         device.resume();
-        thread::sleep(Duration::from_millis(2000));
+        thread::sleep(Duration::from_millis(40000));
     }
 }

@@ -19,6 +19,7 @@ struct Channel {
 pub struct Song {
     track: Vec<Field>,
     channels: Vec<Channel>,
+    bpm: f64,
     tick_countdown: f64,
     point_period: f64,
     field: usize,
@@ -52,6 +53,7 @@ impl Song {
                 for _ in 0..num_channels {tmp.push(Channel::new());}
                 tmp
             },
+            bpm: 120.0,
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),
             field: 0,
@@ -60,11 +62,11 @@ impl Song {
 
 
     fn tick(&mut self) {
-        self.tick_countdown += 0.5;
+        self.tick_countdown += 60.0 / self.bpm;
 
         let note = self.track[self.field].note;
         if note.is_some() {self.channels[0].note = note.unwrap() as f64}
-        self.field = (self.field + 1) % self.track.len();
+        self.field += 1;
     }
 
     pub fn get_point(&mut self) -> f32 {
