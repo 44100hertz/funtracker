@@ -3,7 +3,3 @@ pub struct Field {
     pub command: Option<char>,
     pub value: Option<f32>,
 }
-
-pub struct Track {
-    pattern: Vec<Field>,
-}

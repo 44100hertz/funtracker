@@ -1,13 +1,16 @@
 use player::channel::Channel;
+use player::track::Field;
 
 pub struct Song {
+    pub track: Vec<Field>,
     pub channels: Vec<Channel>,
 }
 
 impl Song {
     pub fn new() -> Song {
         Song {
-            channels: vec![Channel::new()],
+            track: Vec::new(),
+            channels: Vec::new(),
         }
     }
 
