@@ -6,7 +6,7 @@ pub mod base32;
 pub mod parser;
 
 #[cfg(test)]
-mod tests {
+mod parser_tests {
     use super::parser;
     use super::base32;
     #[test]
@@ -48,18 +48,18 @@ mod tests {
     #[test]
     fn parse_command_value_field() {
         let field = parser::parse_field(".-. A1234");
-        assert_eq!(field.value, Some(1234f32));
+        assert_eq!(field.value, Some(1234.0));
     }
 
     #[test]
     fn note_frequency() {
         let freq = super::note::get_freq(60);
-        assert_eq!(freq, 440f32)
+        assert_eq!(freq, 440.0)
     }
 
     #[test]
     fn note_period() {
         let freq = super::note::get_period(60);
-        assert_eq!(freq, (1.0/440.0) as f32)
+        assert_eq!(freq, 1.0/440.0)
     }
 }
