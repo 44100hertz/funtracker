@@ -9,6 +9,7 @@ pub struct Field {
 
 struct Channel {
     samp_len: f64,
+    samp_rate: f64,
     wave: f64,
     phase: f64,
     volume: f64,
@@ -20,12 +21,14 @@ pub struct Song {
     channels: Vec<Channel>,
     tick_countdown: f64,
     point_period: f64,
+    field: usize,
 }
 
 impl Channel {
     fn new() -> Channel {
         Channel {
             samp_len: 200.0,
+            samp_rate: 440.0,
             wave: 0.0,
             phase: 0.0,
             volume: 1.0,
@@ -34,8 +37,9 @@ impl Channel {
     }
 
     pub fn get_point(&mut self) {
-        self.phase = (self.phase + note::get_period(self.note)) % (self.samp_len);
-        self.wave = if(self.phase > self.samp_len / 2.0) {1.0} else {-1.0}
+        let period = note::get_period(self.note) * self.samp_rate;
+        self.phase = (self.phase + period) % (self.samp_len);
+        self.wave = if self.phase > self.samp_len / 2.0 {1.0} else {-1.0}
     }
 }
 
@@ -50,13 +54,17 @@ impl Song {
             },
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),
+            field: 0,
         }
     }
 
 
     fn tick(&mut self) {
         self.tick_countdown += 0.5;
-        println!("tick");
+
+        let note = self.track[self.field].note;
+        if note.is_some() {self.channels[0].note = note.unwrap() as f64}
+        self.field = (self.field + 1) % self.track.len();
     }
 
     pub fn get_point(&mut self) -> f32 {
