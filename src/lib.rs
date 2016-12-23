@@ -5,5 +5,5 @@ mod tests {
     }
 }
 
-pub mod output;
+pub mod audio;
 pub mod player;
