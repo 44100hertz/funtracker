@@ -10,6 +10,18 @@ pub struct Channel {
 }
 
 impl Channel {
+    pub fn new() -> Channel {
+        Channel {
+            samp_off: 0,
+            samp_len: 0,
+            samp_rate: 0f32,
+            wave: 0f32,
+            phase: 0f32,
+            volume: 1f32,
+            note: 0,
+        }
+    }
+
     pub fn get_point(&mut self) {
         self.phase = (self.phase + 1f32) % (self.samp_len as f32);
         // Make a square wave

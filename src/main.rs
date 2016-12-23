@@ -8,19 +8,7 @@ mod audio;
 use audio::Audio;
 
 fn main() {
-    let sng = Song {
-        channels: vec![
-            Channel {
-                samp_off: 0,
-                samp_len: 200,
-                samp_rate: 0f32,
-                wave: 0f32,
-                phase: 0f32,
-                volume: 0.5f32,
-                note: 0,
-            },
-        ]
-    };
+    let sng = Song::new();
 
     let sdl_context = sdl2::init()
         .expect("failed to init sdl2");

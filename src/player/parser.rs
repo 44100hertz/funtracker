@@ -1,10 +1,5 @@
 use player::base32;
-
-pub struct Field {
-    pub note: Option<i32>,
-    pub command: Option<char>,
-    pub value: Option<f32>,
-}
+use player::track::Field;
 
 /// parse field with syntax N-O cXXXX
 pub fn parse_field(field: &str) -> Field {

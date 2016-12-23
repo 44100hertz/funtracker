@@ -5,6 +5,12 @@ pub struct Song {
 }
 
 impl Song {
+    pub fn new() -> Song {
+        Song {
+            channels: vec![Channel::new()],
+        }
+    }
+
     pub fn get_point(&mut self) -> f32 {
         // Update channel states
         for c in &mut self.channels {

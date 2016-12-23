@@ -1,5 +1,6 @@
 pub mod channel;
 pub mod song;
+pub mod track;
 pub mod note;
 pub mod base32;
 pub mod parser;
