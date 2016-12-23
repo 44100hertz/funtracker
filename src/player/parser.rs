@@ -2,7 +2,7 @@ use player::base32;
 use player::song::Field;
 
 pub fn parse_seq(track: &str) -> Vec<Field> {
-    let mut lines = track.split("\n");
+    let lines = track.split("\n");
     let mut parsed = Vec::new();
     for field in lines {
         parsed.push(parse_field(field));
@@ -14,7 +14,7 @@ pub fn parse_seq(track: &str) -> Vec<Field> {
 pub fn parse_field(field: &str) -> Field {
     let note = parse_note(&field[0..3]);
 
-    let value: Option<f32>;
+    let value: Option<f64>;
     let command = base32::char_to_base32(field.as_bytes()[4] as char);
     if command.is_some() {
         value = Some(
