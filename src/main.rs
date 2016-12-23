@@ -1,9 +1,7 @@
 extern crate sdl2;
 
 mod player;
-use player::track::Field;
-use player::channel::Channel;
-use player::song::Song;
+use player::song::{Song, Field, Channel};
 
 mod audio;
 use audio::Audio;

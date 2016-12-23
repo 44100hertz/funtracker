@@ -1,5 +1,5 @@
 use player::base32;
-use player::track::Field;
+use player::song::Field;
 
 /// parse field with syntax N-O cXXXX
 pub fn parse_field(field: &str) -> Field {
