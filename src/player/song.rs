@@ -1,4 +1,5 @@
 use player::parser;
+use player::note;
 
 pub struct Field {
     pub note: Option<i32>,
@@ -33,7 +34,8 @@ impl Channel {
     }
 
     pub fn get_point(&mut self) {
-        self.phase = (self.phase + 1.0) % (self.samp_len);
+        self.phase = (self.phase + note::get_period(self.note)) % (self.samp_len);
+        self.wave = if(self.phase > self.samp_len / 2.0) {1.0} else {-1.0}
     }
 }
 
