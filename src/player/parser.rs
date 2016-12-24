@@ -10,7 +10,7 @@ pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
 pub fn parse_line(line: &str) -> Vec<Field> {
     let mut parsed = Vec::new();
     for field in line.split("|") {
-        match parse_field(field) {
+        match parse_field(field.trim()) {
             Ok(result) => parsed.push(result),
             Err(err) => println!("{}", err),
         }
