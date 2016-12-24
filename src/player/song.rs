@@ -28,19 +28,13 @@ pub struct Song {
 impl Channel {
     fn new() -> Channel {
         Channel {
-            samp_len: 200.0,
-            samp_rate: 440.0,
+            samp_len: 73.0,
+            samp_rate: 32000.0,
             wave: 0.0,
             phase: 0.0,
             volume: 1.0,
             note: 0.0,
         }
-    }
-
-    pub fn get_point(&mut self) {
-        let period = note::get_period(self.note) * self.samp_rate;
-        self.phase = (self.phase + period) % (self.samp_len);
-        self.wave = if self.phase > self.samp_len / 2.0 {1.0} else {-1.0}
     }
 }
 
@@ -76,14 +70,13 @@ impl Song {
         if self.tick_countdown < 0.0 { self.tick(); }
         self.tick_countdown -= self.point_period;
 
-        // Update channel states
-        for c in &mut self.channels {
-            c.get_point();
-        }
-
-        // Make final mix
+        // Mix audio
         let mut mix: f64 = 0.0;
         for c in &mut self.channels {
+            let phase_ratio = self.point_period * c.samp_rate;
+            let phase_offset = note::get_freq(c.note) * phase_ratio;
+            c.phase = (c.phase + phase_offset) % (c.samp_len);
+            c.wave = self.samples[c.phase as usize] as f64 / 255.0;
             mix += c.wave * c.volume;
         }
 
