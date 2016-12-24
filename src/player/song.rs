@@ -16,13 +16,13 @@ struct Channel {
 }
 
 pub struct Song {
+    channels: Vec<Channel>,
     track: Vec<Vec<Field>>,
     bpm: f64,
     tick_countdown: f64,
     point_period: f64,
     field: usize,
     samples: Vec<u8>,
-    channels: Vec<Channel>,
 }
 
 impl Channel {
@@ -39,20 +39,20 @@ impl Channel {
 }
 
 impl Song {
-    pub fn new(seq: Vec<Vec<Field>>, samples: Vec<u8>, num_channels: i32) -> Song {
+    pub fn new(seq: Vec<Vec<Field>>, samples: Vec<u8>) -> Song {
         Song {
+            channels: {
+                let mut tmp = Vec::new();
+                for _ in &seq[0] {tmp.push(Channel::new());}
+                tmp
+            },
+
             track: seq,
             bpm: 120.0,
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),
             field: 0,
             samples: samples,
-
-            channels: {
-                let mut tmp = Vec::new();
-                for _ in 0..num_channels {tmp.push(Channel::new());}
-                tmp
-            },
         }
     }
 
@@ -60,13 +60,11 @@ impl Song {
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
-        let mut i = 0;
-        for c in &mut self.channels {
+        for i in 0..self.track[self.field].len() {
             match self.track[self.field][i].note {
-                 Some(note) => c.note = note as f64,
+                 Some(note) => self.channels[i].note = note as f64,
                  None => {},
             };
-            i = i + 1;
         }
         self.field += 1;
     }
