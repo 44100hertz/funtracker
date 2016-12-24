@@ -54,7 +54,7 @@ mod parser_tests {
 
     #[test]
     fn note_period() {
-        let freq = super::note::get_period(60.0);
-        assert_eq!(freq, 1.0/440.0)
+        let freq = super::note::get_freq(60.0);
+        assert_eq!(freq, 1.0)
     }
 }
