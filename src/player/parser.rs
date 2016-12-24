@@ -52,13 +52,12 @@ pub fn parse_note(note: &str) -> Option<i32> {
 
     let accidental_offset = match bytes[1] as char {
         '#' => 1,
-        '-' => 0,
-        _ => return None,
+        _ => 0,
     };
 
     let octave = match (bytes[2] as char).to_digit(10) {
         Some(octave) => octave,
-        None => return None,
+        None => 4,
     };
 
     Some(octave as i32 * 12 + letter_offset + accidental_offset)
