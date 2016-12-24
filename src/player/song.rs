@@ -61,10 +61,9 @@ impl Song {
         self.tick_countdown += 60.0 / self.bpm;
 
         for i in 0..self.track[self.field].len() {
-            match self.track[self.field][i].note {
-                 Some(note) => self.channels[i].note = note as f64,
-                 None => {},
-            };
+            if let Some(note) = self.track[self.field][i].note {
+                self.channels[i].note = note as f64;
+            }
         }
         self.field += 1;
     }

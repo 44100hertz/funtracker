@@ -22,11 +22,10 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
     path.push("samples.raw");
 
     let mut samples = Vec::new();
-    match File::open(&path) {
-        Ok(mut file) => file.read_to_end(&mut samples)
-            .expect("error reading file"),
-        Err(_) => 0
-    };
+    if let Ok(mut file) = File::open(&path) {
+        file.read_to_end(&mut samples)
+            .expect("error reading file");
+    }
 
     Song::new(sequence, samples)
 }
