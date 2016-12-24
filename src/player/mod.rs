@@ -4,6 +4,7 @@ pub mod track;
 pub mod note;
 pub mod base32;
 pub mod parser;
+pub mod parser_driver;
 
 #[cfg(test)]
 mod parser_tests {
@@ -49,12 +50,6 @@ mod parser_tests {
     fn parse_command_value_field() {
         let field = parser::parse_field(".-. A1234").unwrap();
         assert_eq!(field.value, Some(1234.0));
-    }
-
-    #[test]
-    fn note_frequency() {
-        let freq = super::note::get_freq(60.0);
-        assert_eq!(freq, 440.0)
     }
 
     #[test]
