@@ -1,12 +1,19 @@
 use player::base32;
 use player::song::Field;
 
-pub fn parse_seq(track: &str) -> Vec<Field> {
-    let lines = track.split("\n");
+pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
     let mut parsed = Vec::new();
-    for field in lines {
-        let field_parse = parse_field(field);
-        if field_parse.is_ok() {parsed.push(field_parse.unwrap());}
+    for line in track.split("\n") { parsed.push(parse_line(line)); }
+    parsed
+}
+
+pub fn parse_line(line: &str) -> Vec<Field> {
+    let mut parsed = Vec::new();
+    for field in line.split("|") {
+        match parse_field(field) {
+            Ok(result) => parsed.push(result),
+            Err(err) => println!("{}", err),
+        }
     }
     parsed
 }

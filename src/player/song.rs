@@ -16,7 +16,7 @@ struct Channel {
 }
 
 pub struct Song {
-    track: Vec<Field>,
+    track: Vec<Vec<Field>>,
     bpm: f64,
     tick_countdown: f64,
     point_period: f64,
@@ -32,14 +32,14 @@ impl Channel {
             samp_rate: 32000.0,
             wave: 0.0,
             phase: 0.0,
-            volume: 1.0,
+            volume: 0.5,
             note: 0.0,
         }
     }
 }
 
 impl Song {
-    pub fn new(seq: Vec<Field>, samples: Vec<u8>, num_channels: i32) -> Song {
+    pub fn new(seq: Vec<Vec<Field>>, samples: Vec<u8>, num_channels: i32) -> Song {
         Song {
             track: seq,
             bpm: 120.0,
@@ -60,8 +60,14 @@ impl Song {
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
-        let note = self.track[self.field].note;
-        if note.is_some() {self.channels[0].note = note.unwrap() as f64}
+        let mut i = 0;
+        for c in &mut self.channels {
+            match self.track[self.field][i].note {
+                 Some(note) => c.note = note as f64,
+                 None => {},
+            };
+            i = i + 1;
+        }
         self.field += 1;
     }
 

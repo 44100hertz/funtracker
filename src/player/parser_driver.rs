@@ -28,5 +28,5 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
         Err(_) => 0
     };
 
-    Song::new(sequence, samples, 1)
+    Song::new(sequence, samples, 2)
 }
