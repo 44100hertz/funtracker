@@ -17,11 +17,12 @@ struct Channel {
 
 pub struct Song {
     track: Vec<Field>,
-    channels: Vec<Channel>,
     bpm: f64,
     tick_countdown: f64,
     point_period: f64,
     field: usize,
+    samples: Vec<u8>,
+    channels: Vec<Channel>,
 }
 
 impl Channel {
@@ -44,18 +45,20 @@ impl Channel {
 }
 
 impl Song {
-    pub fn new(seq: Vec<Field>, num_channels: i32) -> Song {
+    pub fn new(seq: Vec<Field>, samples: Vec<u8>, num_channels: i32) -> Song {
         Song {
             track: seq,
+            bpm: 120.0,
+            tick_countdown: 0.0,
+            point_period: (1.0 / 48000.0),
+            field: 0,
+            samples: samples,
+
             channels: {
                 let mut tmp = Vec::new();
                 for _ in 0..num_channels {tmp.push(Channel::new());}
                 tmp
             },
-            bpm: 120.0,
-            tick_countdown: 0.0,
-            point_period: (1.0 / 48000.0),
-            field: 0,
         }
     }
 

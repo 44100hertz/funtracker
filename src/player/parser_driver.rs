@@ -9,14 +9,24 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
     path.push("sequence");
 
     let sequence = match File::open(&path) {
-        Ok(mut seq_file) => {
-            let mut seq_str = String::new();
-            seq_file.read_to_string(&mut seq_str)
+        Ok(mut file) => {
+            let mut s = String::new();
+            file.read_to_string(&mut s)
                 .expect("error reading file");
-            parser::parse_seq(&seq_str)
+            parser::parse_seq(&s)
         },
         Err(_) => Vec::new(),
     };
 
-    Song::new(sequence, 1)
+    path.pop();
+    path.push("samples.raw");
+
+    let mut samples = Vec::new();
+    match File::open(&path) {
+        Ok(mut file) => file.read_to_end(&mut samples)
+            .expect("error reading file"),
+        Err(_) => 0
+    };
+
+    Song::new(sequence, samples, 1)
 }
