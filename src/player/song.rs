@@ -70,6 +70,7 @@ impl Song {
     }
 
     pub fn get_point(&mut self) -> f32 {
+        // Tick management
         if self.tick_countdown < 0.0 { self.tick(); }
         self.tick_countdown -= self.point_period;
 

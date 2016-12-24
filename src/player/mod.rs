@@ -35,31 +35,31 @@ mod parser_tests {
 
     #[test]
     fn parse_note_field() {
-        let field = parser::parse_field("C-4 .....");
+        let field = parser::parse_field("C-4 .....").unwrap();
         assert_eq!(field.note, Some(48));
     }
 
     #[test]
     fn parse_command_field() {
-        let field = parser::parse_field(".-. A1234");
+        let field = parser::parse_field(".-. A1234").unwrap();
         assert_eq!(field.command, Some('A'));
     }
 
     #[test]
     fn parse_command_value_field() {
-        let field = parser::parse_field(".-. A1234");
+        let field = parser::parse_field(".-. A1234").unwrap();
         assert_eq!(field.value, Some(1234.0));
     }
 
     #[test]
     fn note_frequency() {
-        let freq = super::note::get_freq(60);
+        let freq = super::note::get_freq(60.0);
         assert_eq!(freq, 440.0)
     }
 
     #[test]
     fn note_period() {
-        let freq = super::note::get_period(60);
+        let freq = super::note::get_period(60.0);
         assert_eq!(freq, 1.0/440.0)
     }
 }

@@ -5,31 +5,27 @@ pub fn parse_seq(track: &str) -> Vec<Field> {
     let lines = track.split("\n");
     let mut parsed = Vec::new();
     for field in lines {
-        parsed.push(parse_field(field));
+        let field_parse = parse_field(field);
+        if field_parse.is_ok() {parsed.push(field_parse.unwrap());}
     }
     parsed
 }
 
 /// parse field with syntax N-O cXXXX
-pub fn parse_field(field: &str) -> Field {
-    let note = parse_note(&field[0..3]);
-
-    let value: Option<f64>;
-    let command = base32::char_to_base32(field.as_bytes()[4] as char);
-    if command.is_some() {
-        value = Some(
-            *&field[5..9].parse()
-                .expect("invalid command")
-        );
-    } else {
-        value = None;
+pub fn parse_field(field: &str) -> Result<Field, String> {
+    if field.len() != 9 {
+        return Err(format!("Field too short, ignored: {}", field));
     }
 
-    Field {
+    let note = parse_note(&field[0..3]);
+    let command = base32::char_to_base32(field.as_bytes()[4] as char);
+    let value = *&field[5..9].parse().ok();
+
+    Ok(Field {
         note: note,
         command: command,
         value: value,
-    }
+    })
 }
 
 /// Return a midi note from a string e.g. "C-4"
@@ -49,11 +45,14 @@ pub fn parse_note(note: &str) -> Option<i32> {
 
     let accidental_offset = match bytes[1] as char {
         '#' => 1,
-        _ => 0,
+        '-' => 0,
+        _ => return None,
     };
 
-    let octave = (bytes[2] as char).to_digit(10)
-        .expect("octave not a char");
+    let octave = match (bytes[2] as char).to_digit(10) {
+        Some(octave) => octave,
+        None => return None,
+    };
 
     Some(octave as i32 * 12 + letter_offset + accidental_offset)
 }
