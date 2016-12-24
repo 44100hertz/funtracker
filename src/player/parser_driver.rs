@@ -1,10 +1,14 @@
 use std::fs::File;
+use std::path::PathBuf;
 use std::io::Read;
 use player::song::Song;
 use player::parser;
 
-pub fn read_track_from_dir() -> Song {
-    let sequence = match File::open("test_song/sequence") {
+pub fn read_track_from_dir(pathstr: &str) -> Song {
+    let mut path = PathBuf::from(pathstr);
+    path.push("sequence");
+
+    let sequence = match File::open(&path) {
         Ok(mut seq_file) => {
             let mut seq_str = String::new();
             seq_file.read_to_string(&mut seq_str)
@@ -16,4 +20,3 @@ pub fn read_track_from_dir() -> Song {
 
     Song::new(sequence, 1)
 }
-
