@@ -1,41 +1,31 @@
 use player::base32;
 use player::song::Field;
 
-// Sanitize a sequence block and return a usable internal sequence
+/// Sanitize a sequence block and return a usable internal sequence
 pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
     base32::sanitize(track).lines()
         .map(parse_line)
         .collect::<Vec<Vec<Field>>>()
 }
 
-// Parse a single line of channels
+/// Parse a single line of channels
 pub fn parse_line(line: &str) -> Vec<Field> {
-    let mut parsed = Vec::new();
-    for field in line.split("|") {
-        match parse_field(field.trim()) {
-            Ok(result) => parsed.push(result),
-            Err(err) => println!("{}", err),
-        }
-    }
-    parsed
+    line.split("|")
+        .filter_map(parse_field)
+        .collect::<Vec<Field>>()
 }
 
 /// parse field with syntax N-O cXXXX
-pub fn parse_field(field: &str) -> Result<Field, String> {
-    if field.len() < 5 {
-        return Err(format!("Field too short, ignored: {}", field));
-    }
-
-    let note = parse_note(&field[0..3]);
-
-    let command = base32::char_to_base32(field.as_bytes()[4] as char);
-
-    let value = match *&field.split_at(5).1 {
+pub fn parse_field(field: &str) -> Option<Field> {
+    let f = field.trim();
+    let note = parse_note(&f[0..3]);
+    let command = base32::char_to_base32(f.as_bytes()[4] as char);
+    let value = match *&f.split_at(5).1 {
         "" => 0.0, // default value
         n @ _ => parse_num(n).unwrap(),
     };
 
-    Ok(Field {
+    Some(Field {
         note: note,
         command: command,
         value: value,
