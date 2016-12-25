@@ -3,7 +3,7 @@ use player::note;
 pub struct Field {
     pub note: Option<i32>,
     pub command: Option<char>,
-    pub value: Option<f64>,
+    pub value: f64,
 }
 
 struct Channel {
@@ -56,13 +56,28 @@ impl Song {
         }
     }
 
-
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
         for i in 0..self.track[self.field].len() {
-            if let Some(note) = self.track[self.field][i].note {
-                self.channels[i].note = note as f64;
+            let ref field = self.track[self.field][i];
+            let ref mut chan = self.channels[i];
+
+            if let Some(note) = field.note {
+                chan.note = note as f64;
+            }
+
+            if let Some(command) = field.command {
+                let v = field.value;
+                match command {
+                    '3' => chan.samp_len = v,
+                    '6' => chan.samp_rate = v,
+                    '8' => chan.wave = v,
+                    '9' => chan.phase = v,
+                    'A' => chan.volume = v,
+                    'N' => chan.note = v,
+                    param @ _ => println!("unsupported command: {}", param),
+                }
             }
         }
         self.field += 1;
