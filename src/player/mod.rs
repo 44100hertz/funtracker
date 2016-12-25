@@ -49,7 +49,7 @@ mod parser_tests {
     #[test]
     fn parse_command_value_field() {
         let field = parser::parse_field(".-. A1234").unwrap();
-        assert_eq!(field.value, Some(1234.0));
+        assert_eq!(field.value, 1234.0);
     }
 
     #[test]

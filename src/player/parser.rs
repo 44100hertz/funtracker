@@ -26,7 +26,11 @@ pub fn parse_field(field: &str) -> Result<Field, String> {
 
     let note = parse_note(&field[0..3]);
     let command = base32::char_to_base32(field.as_bytes()[4] as char);
-    let value = *&field[5..9].parse().ok();
+
+    let value = match *&field[5..9].parse::<f64>() {
+        Ok(val) => val,
+        Err(_) => 0.0,
+    };
 
     Ok(Field {
         note: note,
