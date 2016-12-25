@@ -7,6 +7,7 @@ pub struct Field {
 }
 
 struct Channel {
+    samp_off: f64,
     samp_len: f64,
     samp_rate: f64,
     wave: f64,
@@ -28,6 +29,7 @@ pub struct Song {
 impl Channel {
     fn new() -> Channel {
         Channel {
+            samp_off: 0.0,
             samp_len: 73.0,
             samp_rate: 32000.0,
             wave: 0.0,
@@ -70,6 +72,7 @@ impl Song {
             if let Some(command) = field.command {
                 let v = field.value;
                 match command {
+                    '0' => chan.samp_off = v,
                     '3' => chan.samp_len = v,
                     '6' => chan.samp_rate = v,
                     '8' => chan.wave = v,
@@ -94,7 +97,8 @@ impl Song {
             let phase_ratio = self.point_period * c.samp_rate;
             let phase_offset = note::get_freq(c.note) * phase_ratio;
             c.phase = (c.phase + phase_offset) % (c.samp_len);
-            c.wave = self.samples[c.phase as usize] as f64 / 255.0;
+            let samp_index = (c.phase + c.samp_off) as usize;
+            c.wave = self.samples[samp_index] as f64 / 255.0;
             mix += c.wave * c.volume;
         }
 
