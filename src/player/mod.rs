@@ -36,7 +36,7 @@ mod parser_tests {
 
     #[test]
     fn parse_note_field() {
-        let field = parser::parse_field("C-4 .....").unwrap();
+        let field = parser::parse_field("C-4 .").unwrap();
         assert_eq!(field.note, Some(48));
     }
 
@@ -52,6 +52,20 @@ mod parser_tests {
         assert_eq!(field.value, 1234.0);
     }
 
+    #[test]
+    fn parse_kilo() {
+        let kilo = parser::parse_num("1k");
+        assert_eq!(kilo, 1000.0);
+    }
+
+    #[test]
+    fn parse_kilo_decimal() {
+        let kilo = parser::parse_num("1.1k");
+        assert_eq!(kilo, 1100.0)
+    }
+}
+
+mod note_tests {
     #[test]
     fn note_period() {
         let freq = super::note::get_freq(60.0);
