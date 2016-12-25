@@ -54,14 +54,20 @@ mod parser_tests {
 
     #[test]
     fn parse_kilo() {
-        let kilo = parser::parse_num("1k");
-        assert_eq!(kilo, 1000.0);
+        let kilo = parser::parse_num("1K");
+        assert_eq!(kilo, Some(1000.0));
     }
 
     #[test]
     fn parse_kilo_decimal() {
-        let kilo = parser::parse_num("1.1k");
-        assert_eq!(kilo, 1100.0)
+        let kilo = parser::parse_num("1.1K");
+        assert_eq!(kilo, Some(1100.0))
+    }
+
+    #[test]
+    fn parse_bad() {
+        let wrong = parser::parse_num("8NOPEK");
+        assert_eq!(wrong, None);
     }
 }
 

@@ -1,12 +1,14 @@
 use player::base32;
 use player::song::Field;
 
+// Sanitize a sequence block and return a usable internal sequence
 pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
-    let mut parsed = Vec::new();
-    for line in track.lines() { parsed.push(parse_line(line)); }
-    parsed
+    base32::sanitize(track).lines()
+        .map(parse_line)
+        .collect::<Vec<Vec<Field>>>()
 }
 
+// Parse a single line of channels
 pub fn parse_line(line: &str) -> Vec<Field> {
     let mut parsed = Vec::new();
     for field in line.split("|") {
@@ -30,7 +32,7 @@ pub fn parse_field(field: &str) -> Result<Field, String> {
 
     let value = match *&field.split_at(5).1 {
         "" => 0.0, // default value
-        n @ _ => parse_num(n),
+        n @ _ => parse_num(n).unwrap(),
     };
 
     Ok(Field {
@@ -68,22 +70,23 @@ pub fn parse_note(note: &str) -> Option<i32> {
     Some(octave as i32 * 12 + letter_offset + accidental_offset)
 }
 
-pub fn parse_num(numstr: &str) -> f64 {
+/// Parse a clean number with format:
+/// "8" = 8.0, "8K" = 8,000, "8M" = 0.008, etc.
+pub fn parse_num(numstr: &str) -> Option<f64> {
     let trimstr = numstr.trim();
     let last = trimstr.as_bytes()[trimstr.len()-1] as char;
 
-    if last.is_digit(10) {
-        trimstr.parse()
-            .expect("could not parse number")
-    } else {
-        let num: f64 = *&trimstr[0..trimstr.len()-1].parse()
-            .expect("could not parse number");
-        match last {
-            'k' | 'K' => num * 1000.0,
-            'h' | 'H' => num * 100.0,
-            'c' | 'C' => num * (1.0/100.0),
-            'm' | 'M' => num * (1.0/1000.0),
-            _ => num,
+    match last {
+        '0'...'9' => trimstr.parse().ok(),
+        c @ _ => match *&trimstr[0..trimstr.len()-1].parse::<f64>() {
+            Ok(num) => match c {
+                'K' => Some(num * 1000.0),
+                'H' => Some(num * 100.0),
+                'C' => Some(num * (1.0/100.0)),
+                'M' => Some(num * (1.0/1000.0)),
+                _ => None,
+            },
+            Err(_) => None,
         }
     }
 }

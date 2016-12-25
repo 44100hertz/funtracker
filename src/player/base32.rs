@@ -15,3 +15,11 @@ pub fn char_to_base32(c: char) -> Option<char> {
         _ => None,
     }
 }
+
+pub fn sanitize(dirty: &str) -> String {
+    let mut clean = String::new();
+    for cd in dirty.chars() {
+        if let Some(cc) = char_to_base32(cd) { clean.push(cc) }
+    };
+    clean
+}
