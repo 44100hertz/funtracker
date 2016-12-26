@@ -11,25 +11,27 @@ pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
 /// Parse a single line of channels
 pub fn parse_line(line: &str) -> Vec<Field> {
     line.split("|")
-        .filter_map(parse_field)
+        .map(parse_field)
         .collect::<Vec<Field>>()
 }
 
 /// parse field with syntax N-O cXXXX
-pub fn parse_field(field: &str) -> Option<Field> {
+pub fn parse_field(field: &str) -> Field {
     let f = field.trim();
-    let note = parse_note(&f[0..3]);
-    let command = base32::char_to_base32(f.as_bytes()[4] as char);
-    let value = match *&f.split_at(5).1 {
-        "" => 0.0, // default value
-        n @ _ => parse_num(n).unwrap(),
+    let mut words = f.split(" ");
+    let note = match words.next() {
+        Some(word) => parse_note(word),
+        None => None,
+    };
+    let command = match words.next() {
+        Some(s) => Some(s.to_string()),
+        None => None,
     };
 
-    Some(Field {
+    Field {
         note: note,
         command: command,
-        value: value,
-    })
+    }
 }
 
 /// Return a midi note from a string e.g. "C-4"

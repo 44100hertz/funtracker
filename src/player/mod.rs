@@ -36,20 +36,14 @@ mod parser_tests {
 
     #[test]
     fn parse_note_field() {
-        let field = parser::parse_field("C-4 .").unwrap();
+        let field = parser::parse_field("C-4 .");
         assert_eq!(field.note, Some(48));
     }
 
     #[test]
     fn parse_command_field() {
-        let field = parser::parse_field(".-. A1234").unwrap();
-        assert_eq!(field.command, Some('A'));
-    }
-
-    #[test]
-    fn parse_command_value_field() {
-        let field = parser::parse_field(".-. A1234").unwrap();
-        assert_eq!(field.value, 1234.0);
+        let field = parser::parse_field(".-. A1234");
+        assert_eq!(&field.command.unwrap(), "A1234");
     }
 
     #[test]
