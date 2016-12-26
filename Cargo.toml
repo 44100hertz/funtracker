@@ -5,4 +5,3 @@ authors = ["Sam Pagenkopf <ssaammp@gmail.com>"]
 
 [dependencies]
 sdl2 = "0.27.0"
-memmap = "0.5.0"
