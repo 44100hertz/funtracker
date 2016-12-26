@@ -10,8 +10,8 @@ fn main() {
     let sdl_context = sdl2::init()
         .expect("failed to init sdl2");
 
-    let song = files::read_track_from_dir("test_song");
+    let song = files::track_from_dir("test_song");
 
-    let mut out = Audio::new(sdl_context, 48000);
-    out.play_song(song);
+//    let mut out = Audio::new(sdl_context, 48000);
+//    out.play_song(song);
 }
