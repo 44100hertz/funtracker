@@ -1,8 +1,12 @@
 * Vertical Slice 1
 Read one sequence of single-channel, unformatted song data with basic commands.
 Then, output a square wave music file.
-** TODO Micro Goals
-*** DONE Channel concept
-*** TODO Song concept
-*** TODO File I/O
-*** TODO Generate note pitches
+** DONE Channel concept
+** DONE Song concept
+** DONE File I/O
+** DONE Generate note pitches
+
+* Vertical Slice 2
+** TODO read song and file data via memory mapping
+** TODO loop; SDL event to end song
+** TODO proper command parsing
