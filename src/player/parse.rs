@@ -70,15 +70,20 @@ pub fn parse_num(numstr: &str) -> Option<f64> {
 
     match last {
         '0'...'9' => trimstr.parse().ok(),
-        c @ _ => match *&trimstr[0..trimstr.len()-1].parse::<f64>() {
-            Ok(num) => match c {
-                'K' => Some(num * 1000.0),
-                'H' => Some(num * 100.0),
-                'C' => Some(num * (1.0/100.0)),
-                'M' => Some(num * (1.0/1000.0)),
-                _ => None,
-            },
-            Err(_) => None,
-        }
+        'K' => num_part(trimstr, 1000.0),
+        'H' => num_part(trimstr, 100.0),
+        'C' => num_part(trimstr, 0.01),
+        'M' => num_part(trimstr, 0.001),
+        _ => None,
+    }
+}
+
+/// Helper function for the above
+/// Parse everything but the last digit of a number
+/// return a number times multiplier if it parses
+fn num_part(numstr: &str, mult: f64) -> Option<f64> {
+    match *&numstr[0..numstr.len()-1].parse::<f64>() {
+        Ok(num) => Some(num * mult),
+        Err(_) => None,
     }
 }
