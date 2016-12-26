@@ -2,7 +2,7 @@ use std::fs::File;
 use std::path::PathBuf;
 use std::io::Read;
 use player::song::Song;
-use player::parser;
+use player::parse;
 
 pub fn read_track_from_dir(pathstr: &str) -> Song {
     let mut path = PathBuf::from(pathstr);
@@ -13,7 +13,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
             let mut s = String::new();
             file.read_to_string(&mut s)
                 .expect("error reading file");
-            parser::parse_seq(&s)
+            parse::parse_seq(&s)
         },
         Err(_) => Vec::new(),
     };
