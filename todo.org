@@ -7,6 +7,7 @@ Then, output a square wave music file.
 ** DONE Generate note pitches
 
 * Vertical Slice 2
-** TODO read song and file data via memory mapping
+** DONE command parsing
+** TODO separate tests
+** TODO instrument defs
 ** TODO loop; SDL event to end song
-** TODO proper command parsing

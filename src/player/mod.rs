@@ -5,6 +5,7 @@ pub mod note;
 pub mod base32;
 pub mod parse;
 pub mod files;
+pub mod command;
 
 #[cfg(test)]
 mod parse_tests {
@@ -36,7 +37,7 @@ mod parse_tests {
 
     #[test]
     fn parse_note_field() {
-        let field = parse::parse_field("C-4 .");
+        let field = parse::parse_field("C-4");
         assert_eq!(field.note, Some(48));
     }
 
@@ -44,6 +45,12 @@ mod parse_tests {
     fn parse_command_field() {
         let field = parse::parse_field(".-. A1234");
         assert_eq!(field.command.unwrap(), "A1234");
+    }
+
+    #[test]
+    fn parse_dirty_field() {
+        let field = parse::parse_field("Cöç ^&@A321™");
+        assert_eq!(field.command.unwrap(), "A321");
     }
 
     #[test]

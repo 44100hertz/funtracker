@@ -1,13 +1,14 @@
 use player::note;
+use player::command;
 
-struct Channel {
-    samp_off: f64,
-    samp_len: f64,
-    samp_rate: f64,
-    wave: f64,
-    phase: f64,
-    volume: f64,
-    note: f64,
+pub struct Channel {
+    pub samp_off: f64,
+    pub samp_len: f64,
+    pub samp_rate: f64,
+    pub wave: f64,
+    pub phase: f64,
+    pub volume: f64,
+    pub note: f64,
 }
 
 impl Channel {
@@ -15,7 +16,7 @@ impl Channel {
         Channel {
             samp_off: 0.0,
             samp_len: 73.0,
-            samp_rate: 32000.0,
+            samp_rate: 0.0,
             wave: 0.0,
             phase: 0.0,
             volume: 0.5,
@@ -60,11 +61,10 @@ impl Song {
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
-        // for i in 0..self.track[self.field].len() {
-        //     let ref field = self.track[self.field][i];
-        //     let ref mut chan = self.channels[i];
-        //     // Call a command
-        // }
+        for i in 0..self.track[self.field].len() {
+            if let Some(ref c) = self.track[self.field][i].command
+            { command::set(&mut self.channels[i], c) }
+        }
         self.field += 1;
     }
 

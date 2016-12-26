@@ -17,14 +17,13 @@ pub fn parse_line(line: &str) -> Vec<Field> {
 
 /// parse field with syntax N-O cXXXX
 pub fn parse_field(field: &str) -> Field {
-    let f = field.trim();
-    let mut words = f.split(" ");
+    let mut words = field.split(" ");
     let note = match words.next() {
         Some(word) => parse_note(word),
-        None => None,
+        None => parse_note(&field),
     };
     let command = match words.next() {
-        Some(s) => Some(s.to_owned()),
+        Some(s) => Some(base32::sanitize(s)),
         None => None,
     };
 
@@ -37,6 +36,7 @@ pub fn parse_field(field: &str) -> Field {
 /// Return a midi note from a string e.g. "C-4"
 pub fn parse_note(note: &str) -> Option<i32> {
     let bytes = note.as_bytes();
+    if bytes.len() < 3 { return None };
 
     let letter_offset = match bytes[0] as char {
         'C' => 0,
