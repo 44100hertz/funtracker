@@ -43,7 +43,7 @@ mod parse_tests {
     #[test]
     fn parse_command_field() {
         let field = parse::parse_field(".-. A1234");
-        assert_eq!(&field.command.unwrap(), "A1234");
+        assert_eq!(field.command.unwrap(), "A1234");
     }
 
     #[test]

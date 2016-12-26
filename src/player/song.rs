@@ -1,10 +1,5 @@
 use player::note;
 
-pub struct Field {
-    pub note: Option<i32>,
-    pub command: Option<String>,
-}
-
 struct Channel {
     samp_off: f64,
     samp_len: f64,
@@ -13,16 +8,6 @@ struct Channel {
     phase: f64,
     volume: f64,
     note: f64,
-}
-
-pub struct Song {
-    channels: Vec<Channel>,
-    track: Vec<Vec<Field>>,
-    bpm: f64,
-    tick_countdown: f64,
-    point_period: f64,
-    field: usize,
-    samples: Vec<u8>,
 }
 
 impl Channel {
@@ -37,6 +22,21 @@ impl Channel {
             note: 0.0,
         }
     }
+}
+
+pub struct Field {
+    pub note: Option<i32>,
+    pub command: Option<String>,
+}
+
+pub struct Song {
+    channels: Vec<Channel>,
+    track: Vec<Vec<Field>>,
+    bpm: f64,
+    tick_countdown: f64,
+    point_period: f64,
+    field: usize,
+    samples: Vec<u8>,
 }
 
 impl Song {

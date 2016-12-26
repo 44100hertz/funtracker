@@ -2,8 +2,8 @@ use player::base32;
 use player::song::Field;
 
 /// Sanitize a sequence block and return a usable internal sequence
-pub fn parse_seq(track: &str) -> Vec<Vec<Field>> {
-    base32::sanitize(track).lines()
+pub fn parse_seq(track: String) -> Vec<Vec<Field>> {
+    track.lines()
         .map(parse_line)
         .collect::<Vec<Vec<Field>>>()
 }
@@ -24,7 +24,7 @@ pub fn parse_field(field: &str) -> Field {
         None => None,
     };
     let command = match words.next() {
-        Some(s) => Some(s.to_string()),
+        Some(s) => Some(s.to_owned()),
         None => None,
     };
 
