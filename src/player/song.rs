@@ -3,6 +3,7 @@ use player::command;
 use player::instrument::Inst;
 
 pub struct Chan {
+    pub inst: usize,
     pub samp_off: f64,
     pub samp_len: f64,
     pub samp_rate: f64,
@@ -15,6 +16,7 @@ pub struct Chan {
 impl Chan {
     fn new() -> Chan {
         Chan {
+            inst: 0,
             samp_off: 0.0,
             samp_len: 73.0,
             samp_rate: 0.0,
@@ -66,8 +68,11 @@ impl Song {
         self.tick_countdown += 60.0 / self.bpm;
 
         for i in 0..self.track[self.field].len() {
-            if let Some(note) = self.track[self.field][i].note
-            { self.channels[i].note = note as f64 }
+            if let Some(note) = self.track[self.field][i].note {
+                self.channels[i].note = note as f64;
+                self.insts[self.channels[i].inst]
+                    .apply_note(&mut self.channels[i]);
+            }
             if let Some(ref c) = self.track[self.field][i].command
             { command::set(c, &mut self.channels[i]) }
         }
@@ -95,7 +100,7 @@ impl Song {
             // Grab the current phase from this offset
             c.wave = self.samples[samp_index] as f64 / 255.0;
             // Mix the channel's wave
-            mix += c.wave * c.volume;
+            mix += c.wave * c.volume.max(0.0);
         }
 
         mix as f32
