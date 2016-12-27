@@ -82,11 +82,19 @@ impl Song {
         // Mix audio
         let mut mix: f64 = 0.0;
         for c in &mut self.channels {
+            // Get the ratio between native and channel sample rates;
+            // this is the "desired" point period.
             let phase_ratio = self.point_period * c.samp_rate;
+            // Adjust the desired point period by the frequency offset
             let phase_offset = note::get_freq(c.note) * phase_ratio;
+            // Increase the phase, using a modulo for looping
+            // Known error: phase offsets that overflow usize break
             c.phase = (c.phase + phase_offset) % c.samp_len;
+            // Add this to the sample offset to find offset within bank
             let samp_index = (c.phase + c.samp_off) as usize;
+            // Grab the current phase from this offset
             c.wave = self.samples[samp_index] as f64 / 255.0;
+            // Mix the channel's wave
             mix += c.wave * c.volume;
         }
 
