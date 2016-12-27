@@ -1,8 +1,8 @@
 use player::parse::parse_num as p;
-use player::song::Channel;
+use player::song::Chan;
 
 /// Set a parameter
-pub fn set(chan: &mut Channel, command: &str) {
+pub fn set(chan: &mut Chan, command: &str) {
     if command.len()==0 {return};
     let (id, v) = command.split_at(1);
     match id {

@@ -2,7 +2,7 @@ use player::note;
 use player::command;
 use player::instrument::Inst;
 
-pub struct Channel {
+pub struct Chan {
     pub samp_off: f64,
     pub samp_len: f64,
     pub samp_rate: f64,
@@ -12,9 +12,9 @@ pub struct Channel {
     pub note: f64,
 }
 
-impl Channel {
-    fn new() -> Channel {
-        Channel {
+impl Chan {
+    fn new() -> Chan {
+        Chan {
             samp_off: 0.0,
             samp_len: 73.0,
             samp_rate: 0.0,
@@ -32,7 +32,7 @@ pub struct Field {
 }
 
 pub struct Song {
-    channels: Vec<Channel>,
+    channels: Vec<Chan>,
     track: Vec<Vec<Field>>,
     insts: Vec<Inst>,
     bpm: f64,
@@ -48,7 +48,7 @@ impl Song {
         Song {
             channels: {
                 let mut tmp = Vec::new();
-                for _ in &seq[0] {tmp.push(Channel::new());}
+                for _ in &seq[0] {tmp.push(Chan::new());}
                 tmp
             },
             track: seq,
