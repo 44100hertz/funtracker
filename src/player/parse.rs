@@ -65,25 +65,22 @@ pub fn parse_note(note: &str) -> Option<i32> {
 /// Parse a clean number with format:
 /// "8" = 8.0, "8K" = 8,000, "8M" = 0.008, etc.
 pub fn parse_num(numstr: &str) -> Option<f64> {
-    let trimstr = numstr.trim();
-    let chars = trimstr.chars().collect::<Vec<char>>();
-
-    match *chars.last().unwrap() {
-        '0'...'9' => trimstr.parse().ok(),
-        'K' => num_part(trimstr, 1000.0),
-        'H' => num_part(trimstr, 100.0),
-        'C' => num_part(trimstr, 0.01),
-        'M' => num_part(trimstr, 0.001),
-        _ => None,
+    fn np(numstr: &str, mult: f64) -> Option<f64> {
+        match *&numstr[0..numstr.len()-1].parse::<f64>() {
+            Ok(num) => Some(num * mult),
+            Err(_) => None,
+        }
     }
-}
 
-/// Helper function for the above
-/// Parse everything but the last digit of a number
-/// return a number times multiplier if it parses
-fn num_part(numstr: &str, mult: f64) -> Option<f64> {
-    match *&numstr[0..numstr.len()-1].parse::<f64>() {
-        Ok(num) => Some(num * mult),
-        Err(_) => None,
+    let s = numstr.trim();
+
+    let b = s.as_bytes();
+    match b[b.len()-1] {
+        b'0'...b'9' => s.parse().ok(),
+        b'K' => np(s, 1000.0),
+        b'H' => np(s, 100.0),
+        b'C' => np(s, 0.01),
+        b'M' => np(s, 0.001),
+        _ => None,
     }
 }
