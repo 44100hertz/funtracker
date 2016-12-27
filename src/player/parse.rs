@@ -56,11 +56,11 @@ pub fn parse_note(note: &str) -> Option<i32> {
     };
 
     let octave = match chars[2].to_digit(10) {
-        Some(octave) => octave - 4,
+        Some(o) => o as i32 - 4,
         None => 0,
     };
 
-    Some(octave as i32 * 12 + letter_offset + accidental_offset)
+    Some(octave*12 + letter_offset + accidental_offset)
 }
 
 /// Parse a clean number with format:
