@@ -62,6 +62,8 @@ impl Song {
         self.tick_countdown += 60.0 / self.bpm;
 
         for i in 0..self.track[self.field].len() {
+            if let Some(note) = self.track[self.field][i].note
+            { self.channels[i].note = note as f64 }
             if let Some(ref c) = self.track[self.field][i].command
             { command::set(&mut self.channels[i], c) }
         }
