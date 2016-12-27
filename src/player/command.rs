@@ -2,7 +2,7 @@ use player::parse::parse_num as p;
 use player::song::Chan;
 
 /// Set a parameter
-pub fn set(chan: &mut Chan, command: &str) {
+pub fn set(command: &str, chan: &mut Chan) {
     if command.len()==0 {return};
     let (id, v) = command.split_at(1);
     match id {

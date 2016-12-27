@@ -69,7 +69,7 @@ impl Song {
             if let Some(note) = self.track[self.field][i].note
             { self.channels[i].note = note as f64 }
             if let Some(ref c) = self.track[self.field][i].command
-            { command::set(&mut self.channels[i], c) }
+            { command::set(c, &mut self.channels[i]) }
         }
         self.field += 1;
     }
