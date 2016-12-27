@@ -65,8 +65,8 @@ pub fn parse_note(note: &str) -> Option<i32> {
 /// Parse a clean number with format:
 /// "8" = 8.0, "8K" = 8,000, "8M" = 0.008, etc.
 pub fn parse_num(numstr: &str) -> Option<f64> {
-    fn np(numstr: &str, mult: f64) -> Option<f64> {
-        match *&numstr[0..numstr.len()-1].parse::<f64>() {
+    fn np(s: &str, mult: f64) -> Option<f64> {
+        match *&s[0..s.len()-1].parse::<f64>() {
             Ok(num) => Some(num * mult),
             Err(_) => None,
         }
