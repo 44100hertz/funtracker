@@ -12,6 +12,8 @@ pub fn char_to_base32(c: char) -> Option<char> {
         '5' | 'S' | 's' => Some('5'),
         '0'...'9' | 'A'...'Z' => Some(c),
         'a'...'z' => c.to_uppercase().next(),
+        '.' => Some('.'),
+        '-' => Some('-'),
         _ => None,
     }
 }
