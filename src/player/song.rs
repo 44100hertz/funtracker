@@ -78,7 +78,7 @@ impl Song {
         for c in &mut self.channels {
             let phase_ratio = self.point_period * c.samp_rate;
             let phase_offset = note::get_freq(c.note) * phase_ratio;
-            c.phase = (c.phase + phase_offset) % (c.samp_len);
+            c.phase = (c.phase + phase_offset) % c.samp_len;
             let samp_index = (c.phase + c.samp_off) as usize;
             c.wave = self.samples[samp_index] as f64 / 255.0;
             mix += c.wave * c.volume;
