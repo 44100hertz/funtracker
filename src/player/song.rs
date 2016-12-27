@@ -1,5 +1,6 @@
 use player::note;
 use player::command;
+use player::instrument::Inst;
 
 pub struct Channel {
     pub samp_off: f64,
@@ -33,6 +34,7 @@ pub struct Field {
 pub struct Song {
     channels: Vec<Channel>,
     track: Vec<Vec<Field>>,
+    insts: Vec<Inst>,
     bpm: f64,
     tick_countdown: f64,
     point_period: f64,
@@ -41,15 +43,17 @@ pub struct Song {
 }
 
 impl Song {
-    pub fn new(seq: Vec<Vec<Field>>, samples: Vec<u8>) -> Song {
+    pub fn new(seq: Vec<Vec<Field>>, samples: Vec<u8>, insts: Vec<Inst>)
+               -> Song {
         Song {
             channels: {
                 let mut tmp = Vec::new();
                 for _ in &seq[0] {tmp.push(Channel::new());}
                 tmp
             },
-
             track: seq,
+            insts: insts,
+
             bpm: 120.0,
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),

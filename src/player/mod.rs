@@ -6,6 +6,7 @@ pub mod base32;
 pub mod parse;
 pub mod files;
 pub mod command;
+pub mod instrument;
 
 #[cfg(test)]
 mod parse_tests {
@@ -14,13 +15,13 @@ mod parse_tests {
     #[test]
     fn middle_c() {
         let note = parse::parse_note("C-4");
-        assert_eq!(note, Some(48))
+        assert_eq!(note, Some(0))
     }
 
     #[test]
     fn a_sharp_0() {
         let note = parse::parse_note("A#0");
-        assert_eq!(note, Some(10))
+        assert_eq!(note, Some(-38))
     }
 
     #[test]
@@ -38,7 +39,7 @@ mod parse_tests {
     #[test]
     fn parse_note_field() {
         let field = parse::parse_field("C-4");
-        assert_eq!(field.note, Some(48));
+        assert_eq!(field.note, Some(0));
     }
 
     #[test]
@@ -75,7 +76,7 @@ mod parse_tests {
 mod note_tests {
     #[test]
     fn note_period() {
-        let freq = super::note::get_freq(60.0);
-        assert_eq!(freq, 1.0)
+        let freq = super::note::get_freq(12.0);
+        assert_eq!(freq, 2.0)
     }
 }

@@ -17,8 +17,7 @@ pub fn parse_line(line: &str) -> Vec<Field> {
 
 /// parse field with syntax N-O cXXXX
 pub fn parse_field(field: &str) -> Field {
-    let trim = field.trim();
-    let mut words = trim.split(" ");
+    let mut words = field.trim().split_whitespace();
     let note = match words.next() {
         Some(word) => parse_note(word),
         None => parse_note(&field),
