@@ -5,7 +5,6 @@ use player::song::Channel;
 pub fn set(chan: &mut Channel, command: &str) {
     if command.len()==0 {return};
     let (id, v) = command.split_at(1);
-    println!("{}", command);
     match id {
         "2" => chan.samp_off  = d_num(v, 0.0),
         "3" => chan.samp_len  = d_num(v, 0.0),
