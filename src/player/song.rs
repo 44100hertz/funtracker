@@ -10,37 +10,49 @@ pub struct Track {
 }
 
 // Live song parameters
-pub struct Song {
-    chan: Vec<Chan>,
-    bpm: f64,
+pub struct Song<'a> {
+    pub track: &'a Track,
+    pub chan: Vec<Chan>,
+    pub bpm: f64,
     tick_countdown: f64,
     point_period: f64,
     field: usize,
 }
 
-impl Song {
-    pub fn new() -> Song {
+impl<'a> Song<'a> {
+    pub fn new(track: &Track, num_chans: usize) -> Song {
         Song {
-            chan: { let mut tmp = Vec::new();
-                    for _ in 1..seq.len() {tmp.push(Chan::new());}
-                    tmp
-            }
+            track: track,
+            chan: {
+                let mut tmp = Vec::new();
+                for _ in 1..num_chans {tmp.push(Chan::new());}
+                tmp },
             bpm: 0.0,
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),
             field: 0,
-            samples: samples,
         }
     }
-}
 
-impl Song {
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
-//        for mut t in &mut self.track {
-//            parse::parse_line(*self, &mut t);
-//        }
+        let fields = self.track.seq[self.field]
+            .split("|")
+            .map(|s| s.trim());
+
+        let mut i: usize = 0;
+        for field in fields {
+            let mut words = field.split_whitespace();
+            if let Some(word) = words.next() {
+                parse::apply_note(word, self, i)
+            };
+            if let Some(word) = words.next() {
+                parse::apply_command(word, self, i)
+            };
+            i = i + 1;
+        }
+
         self.field += 1;
     }
 
@@ -51,7 +63,7 @@ impl Song {
 
         // Mix audio
         let mut mix: f64 = 0.0;
-        for c in &mut self.chans {
+        for c in &mut self.chan {
             // Get the ratio between native and chan sample rates;
             // this is the "desired" point period.
             let phase_ratio = self.point_period * c.samp_rate;
@@ -63,7 +75,7 @@ impl Song {
             // Add this to the sample offset to find offset within bank
             let samp_index = (c.phase + c.samp_off) as usize;
             // Grab the current phase from this offset
-            c.wave = self.samples[samp_index] as f64 / 255.0;
+            c.wave = self.track.samp[samp_index] as f64 / 255.0;
             // Mix the channel's wave
             mix += c.wave * c.volume.max(0.0);
         }
@@ -73,7 +85,7 @@ impl Song {
 
     pub fn apply_inst(&mut self, chan: usize, part: usize) {
         parse::apply_command(
-            self.insts[self.chans[chan].inst][part],
+            &self.track.inst[self.chan[chan].inst][part],
             self,
             chan,
         )

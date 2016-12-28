@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::path::PathBuf;
 use std::io::Read;
-use player::song::Song;
+use player::song::Track;
 use player::parse;
 
 pub fn read_track_from_dir(pathstr: &str) -> Track {
@@ -33,7 +33,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Track {
     path.push("samples.raw");
     let mut samp = Vec::new();
     if let Ok(mut file) = File::open(&path) {
-        file.read_to_end(&mut samples)
+        file.read_to_end(&mut samp)
             .expect("error reading file");
     };
 

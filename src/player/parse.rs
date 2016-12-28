@@ -2,27 +2,13 @@ use player::base32;
 use player::song::Song;
 use player::channel::Chan;
 
-/// parse field string with syntax N-O cXXXX
-pub fn parse_line(song: &mut Song, line: &str) {
-    let fields = line.split("|")
-        .map(|s| s.trim());
-
-    let mut i: usize = 0;
-    for field in fields {
-        let mut words = field.split_whitespace();
-        if let Some(word) = words.next() { apply_note(word, song, i) }
-        if let Some(word) = words.next() { apply_command(word, song, i) }
-        i = i + 1;
-    }
-}
-
 pub fn apply_note(note: &str, song: &mut Song, chan: usize) {
     let chars = note.chars().collect::<Vec<char>>();
     if chars.len() < 3 { return };
 
     match chars[0] {
         c @ 'A'...'G' =>
-            song.chans[chan].note = parse_note(chars),
+            song.chan[chan].note = parse_note(chars),
         i @ '0'...'9' =>
             song.apply_inst(chan, i.to_digit(10).unwrap() as usize),
         _ => {},
@@ -62,7 +48,7 @@ pub fn apply_command(command: &str, song: &mut Song, chan: usize) {
 
     if command.len()==0 {return};
     let (id, v) = command.split_at(1);
-    let ref mut c = song.chans[chan];
+    let ref mut c = song.chan[chan];
     match id {
         "2" => c.samp_off  = d_num(v, 0.0),
         "3" => c.samp_len  = d_num(v, 0.0),

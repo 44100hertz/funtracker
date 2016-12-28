@@ -4,7 +4,7 @@ use std::thread;
 use self::sdl2::audio::{AudioSpecDesired, AudioCallback};
 use self::sdl2::{Sdl, AudioSubsystem};
 
-use player::song::Song;
+use player::song::{Song, Track};
 
 pub struct Audio {
     subsystem: AudioSubsystem,
@@ -20,18 +20,18 @@ impl Audio {
         }
     }
 
-    pub fn play_song(&mut self, song: Song) {
+    pub fn play_track(&mut self, track: Track) {
         let desired_spec = AudioSpecDesired {
             freq: Some(self.srate),
             channels: Some(1),
             samples: None,
         };
 
-        struct ACallback {
-            song: Song,
-        }
+        struct ACallback<'a> {
+            song: Song<'a>,
+        };
 
-        impl AudioCallback for ACallback {
+        impl<'a> AudioCallback for ACallback<'a> {
             type Channel = f32;
             fn callback(&mut self, out: &mut [f32]) {
                 for point in out.iter_mut() {
@@ -41,7 +41,11 @@ impl Audio {
         }
 
         let device = self.subsystem.open_playback(
-            None, &desired_spec, |_| ACallback {song: song})
+            None, &desired_spec, |_|
+            ACallback {
+                song: Song::new(&track, track.seq[1].len()),
+            }
+        )
             .expect("could not open playback");
 
         device.resume();
