@@ -2,17 +2,17 @@ use std::fs::File;
 use std::path::PathBuf;
 use std::io::Read;
 use player::song::Song;
-use player::sequence;
+use player::parse;
 
 pub fn read_track_from_dir(pathstr: &str) -> Song {
     let mut path = PathBuf::from(pathstr);
 
-    path.push("sequence");
-    let sequence = match File::open(&path) {
+    path.push("parse");
+    let parse = match File::open(&path) {
         Ok(mut file) => {
             let mut s = String::new();
             file.read_to_string(&mut s)
-                .expect("can't read sequence");
+                .expect("can't read parse");
             split_song(s)
         },
         Err(_) => Vec::new(),
@@ -37,7 +37,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
             .expect("error reading file");
     };
 
-    Song::new(sequence, insts, samples)
+    Song::new(parse, insts, samples)
 }
 
 pub fn split_song(s: String) -> Vec<String> {

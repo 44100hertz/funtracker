@@ -1,6 +1,6 @@
 use player::note;
 use player::channel::Chan;
-use player::sequence;
+use player::parse;
 
 pub struct Song {
     pub chans: Vec<Chan>,
@@ -38,7 +38,7 @@ impl Song {
         self.tick_countdown += 60.0 / self.bpm;
 
 //        for mut t in &mut self.track {
-//            sequence::parse_line(*self, &mut t);
+//            parse::parse_line(*self, &mut t);
 //        }
         self.field += 1;
     }

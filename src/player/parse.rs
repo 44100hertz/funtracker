@@ -23,7 +23,7 @@ pub fn set_note(note: &str, chan: &mut Chan) {
 
     match chars[0] {
         c @ 'A'...'G' => chan.note = parse_note(chars),
-        i @ '0'...'9' => chan.set_inst(),
+//        i @ '0'...'9' => chan.set_inst(),
         _ => {},
     }
 }
