@@ -8,6 +8,9 @@ Then, output a square wave music file.
 
 * Vertical Slice 2
 ** DONE command parsing
+** TODO have songs do multi-file parsing work, not "files"
+** TODO have channels contain instrument index
+** TODO use references when possible, not strings
 ** TODO separate tests
 ** TODO instrument defs
 ** TODO loop; SDL event to end song
