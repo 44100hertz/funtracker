@@ -3,7 +3,7 @@ pub mod song;
 pub mod note;
 pub mod base32;
 pub mod sequence;
-// pub mod files;
+pub mod files;
 
 #[cfg(test)]
 mod parse_tests {
