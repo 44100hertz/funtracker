@@ -1,6 +1,5 @@
-use player::sequence;
-
 pub struct Chan {
+    pub inst: usize,
     pub samp_off: f64,
     pub samp_len: f64,
     pub samp_rate: f64,
@@ -13,6 +12,7 @@ pub struct Chan {
 impl Chan {
     pub fn new() -> Chan {
         Chan {
+            inst: 0,
             samp_off: 0.0,
             samp_len: 0.0,
             samp_rate: 0.0,
