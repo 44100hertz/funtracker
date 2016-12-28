@@ -13,7 +13,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
             let mut s = String::new();
             file.read_to_string(&mut s)
                 .expect("can't read sequence");
-            split_song(&s)
+            split_song(s)
         },
         Err(_) => Vec::new(),
     };
@@ -24,7 +24,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
         Ok(mut file) => {
             let mut s = String::new();
             file.read_to_string(&mut s).unwrap();
-            split_insts(&s)
+            split_insts(s)
         }
         Err(_) => Vec::new(),
     };
@@ -40,13 +40,13 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
     Song::new(sequence, insts, samples)
 }
 
-pub fn split_song(s: &str) -> Vec<String> {
+pub fn split_song(s: String) -> Vec<String> {
     s.lines()
         .map(|s| s.to_owned())
         .collect()
 }
 
-pub fn split_insts(s: &str) -> Vec<Vec<String>> {
+pub fn split_insts(s: String) -> Vec<Vec<String>> {
     s.lines()
         .map(|s| s.split("|")
              .map(|s| s.to_owned())
