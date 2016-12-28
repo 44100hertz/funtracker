@@ -2,7 +2,6 @@ use std::fs::File;
 use std::path::PathBuf;
 use std::io::Read;
 use player::song::Track;
-use player::parse;
 
 pub fn read_track_from_dir(pathstr: &str) -> Track {
     let mut path = PathBuf::from(pathstr);

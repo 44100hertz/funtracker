@@ -1,13 +1,11 @@
-use player::base32;
 use player::song::Song;
-use player::channel::Chan;
 
 pub fn apply_note(note: &str, song: &mut Song, chan: usize) {
     let chars = note.chars().collect::<Vec<char>>();
     if chars.len() < 3 { return };
 
     match chars[0] {
-        c @ 'A'...'G' =>
+        'A'...'G' =>
             song.chan[chan].note = parse_note(chars),
         i @ '0'...'9' =>
             song.apply_inst(chan, i.to_digit(10).unwrap() as usize),
