@@ -45,8 +45,8 @@ pub fn parse_note(chars: Vec<char>) -> f64 {
         '#' => 1,
         _ => 0,
     };
-    if let Some(octave) = chars[3].to_digit(10) {
-        offset += octave-4;
+    if let Some(octave) = chars[2].to_digit(10) {
+        offset += (octave as i32 - 4) * 12;
     }
     offset as f64
 }
