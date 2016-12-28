@@ -4,11 +4,11 @@ use std::io::Read;
 use player::song::Song;
 use player::parse;
 
-pub fn read_track_from_dir(pathstr: &str) -> Song {
+pub fn read_track_from_dir(pathstr: &str) -> Track {
     let mut path = PathBuf::from(pathstr);
 
     path.push("parse");
-    let parse = match File::open(&path) {
+    let seq = match File::open(&path) {
         Ok(mut file) => {
             let mut s = String::new();
             file.read_to_string(&mut s)
@@ -20,7 +20,7 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
 
     path.pop();
     path.push("instruments");
-    let insts = match File::open(&path) {
+    let inst = match File::open(&path) {
         Ok(mut file) => {
             let mut s = String::new();
             file.read_to_string(&mut s).unwrap();
@@ -31,13 +31,17 @@ pub fn read_track_from_dir(pathstr: &str) -> Song {
 
     path.pop();
     path.push("samples.raw");
-    let mut samples = Vec::new();
+    let mut samp = Vec::new();
     if let Ok(mut file) = File::open(&path) {
         file.read_to_end(&mut samples)
             .expect("error reading file");
     };
 
-    Song::new(parse, insts, samples)
+    Track {
+        seq: seq,
+        inst: inst,
+        samp: samp,
+    }
 }
 
 pub fn split_song(s: String) -> Vec<String> {

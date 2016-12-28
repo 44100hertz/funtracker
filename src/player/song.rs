@@ -2,38 +2,39 @@ use player::note;
 use player::channel::Chan;
 use player::parse;
 
+// Static data for a single track
+pub struct Track {
+    pub seq: Vec<String>,
+    pub inst: Vec<Vec<String>>,
+    pub samp: Vec<u8>,
+}
+
+// Live song parameters
 pub struct Song {
-    pub chans: Vec<Chan>,
-    track: Vec<String>,
-    insts: Vec<Vec<String>>,
+    chan: Vec<Chan>,
     bpm: f64,
     tick_countdown: f64,
     point_period: f64,
     field: usize,
-    samples: Vec<u8>,
 }
 
 impl Song {
-    pub fn new(seq: Vec<String>, insts: Vec<Vec<String>>,
-               samples: Vec<u8>)
-               -> Song {
+    pub fn new() -> Song {
         Song {
-            chans: {
-                let mut tmp = Vec::new();
-                for _ in 1..seq.len() {tmp.push(Chan::new());}
-                tmp
-            },
-            track: seq,
-            insts: insts,
-
-            bpm: 120.0,
+            chan: { let mut tmp = Vec::new();
+                    for _ in 1..seq.len() {tmp.push(Chan::new());}
+                    tmp
+            }
+            bpm: 0.0,
             tick_countdown: 0.0,
             point_period: (1.0 / 48000.0),
             field: 0,
             samples: samples,
         }
     }
+}
 
+impl Song {
     fn tick(&mut self) {
         self.tick_countdown += 60.0 / self.bpm;
 
@@ -68,5 +69,13 @@ impl Song {
         }
 
         mix as f32
+    }
+
+    pub fn apply_inst(&mut self, chan: usize, part: usize) {
+        parse::apply_command(
+            self.insts[self.chans[chan].inst][part],
+            self,
+            chan,
+        )
     }
 }
